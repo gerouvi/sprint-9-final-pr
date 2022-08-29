@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { ButtonSwitchMobileDeviceStyled } from './components/ButtonSwitchMobileDevice.styles';
-import { MenuStyled } from './components/Menu.styles';
-import { MobileStyled } from './components/Mobile.styles';
+import { FrameStyled } from './components/Frame.styles';
 import GlobalStyles from './styles/GolablStyles';
 import { THEME_STYLES } from './styles/THEME_STYLES';
+import { LauncherMobileStyled } from './components/LauncherMobile.styles';
+import { LockMobileStyled } from './components/LockMobile.styles';
+import Menu from './components/Menu';
 
 function App() {
-  const [view, setView] = useState('lockedView');
-  const [isMobileSize, setIsMobileSize] = useState(true);
+  const [isLocked, setIsLocked] = useState(true);
+  const [showMobileDevice, setShowMobileDevice] = useState(true);
 
   useEffect(() => {
-    if (window.screen.availWidth <= 820) {
-      setView('gameView');
-    } else {
-      setIsMobileSize(false);
+    if (window.screen.availWidth <= 820 || !showMobileDevice) {
+      setShowMobileDevice(false);
     }
-  }, [view]);
+  }, [showMobileDevice]);
 
   return (
     <ThemeProvider theme={THEME_STYLES}>
@@ -24,16 +25,32 @@ function App() {
 
       {window.screen.availWidth > 820 && (
         <ButtonSwitchMobileDeviceStyled
-          isMobileSize={isMobileSize}
-          setIsMobileSize={setIsMobileSize}
+          showMobileDevice={showMobileDevice}
+          setShowMobileDevice={setShowMobileDevice}
         />
       )}
-
-      {isMobileSize ? (
-        <MenuStyled />
-      ) : (
-        <MobileStyled view={view} setView={setView} />
-      )}
+      <FrameStyled
+        isLocked={isLocked}
+        setIsLocked={setIsLocked}
+        showMobileDevice={showMobileDevice}
+      >
+        <LockMobileStyled
+          isLocked={isLocked}
+          showMobileDevice={showMobileDevice}
+        >
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <LauncherMobileStyled showMobileDevice={showMobileDevice} />
+                }
+              />
+              <Route path="/usememo" element={<Menu />} />
+            </Routes>
+          </BrowserRouter>
+        </LockMobileStyled>
+      </FrameStyled>
     </ThemeProvider>
   );
 }

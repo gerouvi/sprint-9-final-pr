@@ -1,14 +1,14 @@
 const ButtonSwitchMobileDevice = ({
   className,
-  isMobileSize,
-  setIsMobileSize,
+  showMobileDevice,
+  setShowMobileDevice,
 }) => {
   return (
     <button
       className={className}
-      onClick={() => setIsMobileSize((prev) => !prev)}
+      onClick={() => setShowMobileDevice((prev) => !prev)}
     >
-      {!isMobileSize && (
+      {showMobileDevice && (
         <div>
           <div />
         </div>

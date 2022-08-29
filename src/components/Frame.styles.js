@@ -1,7 +1,11 @@
 import styled from 'styled-components';
-import Mobile from './Mobile';
+import Frame from './Frame';
 
-export const MobileStyled = styled(Mobile)`
+export const FrameStyled = styled(Frame)`
+  position: relative;
+`;
+
+export const MobileDevice = styled.div`
   margin-top: 30px;
   position: relative;
   margin-left: auto;
@@ -11,6 +15,15 @@ export const MobileStyled = styled(Mobile)`
   width: 256px;
   height: 560px;
   box-shadow: 0px 20px 15px #33333335;
+`;
+
+export const NoMobileDevice = styled.div`
+  width: 100%;
+  max-width: 700px;
+  height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid black;
 `;
 
 export const Top = styled.div`
