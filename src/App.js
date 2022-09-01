@@ -1,56 +1,81 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { ButtonSwitchMobileDeviceStyled } from './components/ButtonSwitchMobileDevice.styles';
-import { FrameStyled } from './components/Frame.styles';
+import { FrameStyled } from './components/MobileFrame/Frame.styles';
 import GlobalStyles from './styles/GolablStyles';
 import { THEME_STYLES } from './styles/THEME_STYLES';
-import { LauncherMobileStyled } from './components/LauncherMobile.styles';
-import { LockMobileStyled } from './components/LockMobile.styles';
-import Menu from './components/Menu';
+import Translate from './components/MemoWords/Translate';
+import AddWords from './components/MemoWords/AddWords';
+import WordsList from './components/MemoWords/WordsList';
+import Games from './components/MemoWords/Games';
+import CustomUserAuthProvider from './components/providers/CustomUserAuthProvider';
+import ProtectedRoutes from './components/ProtectedRoutes/ProtectedRoutes';
+import LaunchPage from './components/MemoWords/LaunchPage';
+import Account from './components/MemoWords/Account/Account';
+import LauncherMobile from './components/MobileFrame/LauncherMobile';
 
 function App() {
-  const [isLocked, setIsLocked] = useState(true);
   const [showMobileDevice, setShowMobileDevice] = useState(true);
-
-  useEffect(() => {
-    if (window.screen.availWidth <= 820 || !showMobileDevice) {
-      setShowMobileDevice(false);
-    }
-  }, [showMobileDevice]);
 
   return (
     <ThemeProvider theme={THEME_STYLES}>
       <GlobalStyles />
 
-      {window.screen.availWidth > 820 && (
-        <ButtonSwitchMobileDeviceStyled
-          showMobileDevice={showMobileDevice}
-          setShowMobileDevice={setShowMobileDevice}
-        />
-      )}
-      <FrameStyled
-        isLocked={isLocked}
-        setIsLocked={setIsLocked}
-        showMobileDevice={showMobileDevice}
-      >
-        <LockMobileStyled
-          isLocked={isLocked}
-          showMobileDevice={showMobileDevice}
-        >
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <LauncherMobileStyled showMobileDevice={showMobileDevice} />
-                }
-              />
-              <Route path="/usememo" element={<Menu />} />
-            </Routes>
-          </BrowserRouter>
-        </LockMobileStyled>
-      </FrameStyled>
+      <CustomUserAuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <FrameStyled
+                  showMobileDevice={showMobileDevice}
+                  setShowMobileDevice={setShowMobileDevice}
+                >
+                  <LauncherMobile
+                    showMobileDevice={showMobileDevice}
+                    setShowMobileDevice={setShowMobileDevice}
+                  >
+                    <LaunchPage />
+                  </LauncherMobile>
+                </FrameStyled>
+              }
+            />
+            <Route
+              path="/translate"
+              element={
+                <ProtectedRoutes>
+                  <Translate />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/addwords"
+              element={
+                <ProtectedRoutes>
+                  <AddWords />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/wordslist"
+              element={
+                <ProtectedRoutes>
+                  <WordsList />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/games"
+              element={
+                <ProtectedRoutes>
+                  <Games />
+                </ProtectedRoutes>
+              }
+            />
+            <Route path="/account" element={<Account />} />
+          </Routes>
+        </BrowserRouter>
+      </CustomUserAuthProvider>
     </ThemeProvider>
   );
 }
