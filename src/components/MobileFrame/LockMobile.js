@@ -1,9 +1,12 @@
+import logoMemoWords from '../../assets/images/memoWordsWhite.png';
+import { LogoMemoWords } from './LockMobile.styles';
+
 const LockMobile = ({ className, isLocked, showMobileDevice, children }) => {
   if (isLocked && showMobileDevice)
     return (
       <>
         <div className={className}>
-          <div></div>
+          <LogoMemoWords logoMemoWords={logoMemoWords} />
         </div>
       </>
     );

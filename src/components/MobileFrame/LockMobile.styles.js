@@ -10,3 +10,12 @@ export const LockMobileStyled = styled(LockMobile)`
   justify-content: center;
   align-items: center;
 `;
+
+export const LogoMemoWords = styled.div`
+  width: 240px;
+  height: 240px;
+  background-image: url(${({ logoMemoWords }) => logoMemoWords});
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+`;
