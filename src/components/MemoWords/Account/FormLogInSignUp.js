@@ -2,14 +2,19 @@ import {
   logInFunction,
   signUpFunction,
 } from '../../../lib/firebase/firebase-functions';
+import { InputStyled } from '../../Form/Input.styles';
+
+import { Button } from './FormLogInSignUp.styles';
 
 const FormLoginSignIn = ({
   view,
   setView,
   credentialsUser,
   setCredentialsUser,
-}) => {
-  return (
+  className,
+}) => (
+  <div className={className}>
+    {view === 'login' ? <h1>Log In</h1> : <h1>Sign Up</h1>}
     <form
       onSubmit={(e) => {
         e.preventDefault();
@@ -32,7 +37,8 @@ const FormLoginSignIn = ({
     >
       <div>
         <label>Email:</label>
-        <input
+        <InputStyled
+          value={credentialsUser.email}
           type="email"
           onChange={(e) =>
             setCredentialsUser((prev) => ({
@@ -44,7 +50,8 @@ const FormLoginSignIn = ({
       </div>
       <div>
         <label>Password:</label>
-        <input
+        <InputStyled
+          value={credentialsUser.password}
           type="password"
           onChange={(e) =>
             setCredentialsUser((prev) => ({
@@ -54,10 +61,12 @@ const FormLoginSignIn = ({
           }
         />
       </div>
-      {view === 'login' ? <button>Log In</button> : <button>Sign Up</button>}
+      <Button disabled={!credentialsUser.email || !credentialsUser.password}>
+        GO!
+      </Button>
     </form>
-  );
-};
+  </div>
+);
 
 const handleLogIn = async (email, password, setCredentialsUser, setView) => {
   setCredentialsUser((prev) => ({ ...prev, error: null }));

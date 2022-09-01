@@ -3,7 +3,7 @@ import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import WrapperPage from '../WrapperPage';
 import { WrapperButtons } from './Account.style';
-import FormLoginSignIn from './FormLogInSignUp';
+import { FormLoginSignUpStyled } from './FormLogInSignUp.styles';
 import MyAccount from './MyAccount';
 
 const Account = () => {
@@ -15,36 +15,45 @@ const Account = () => {
     if (user) setView('myacoount');
   }, [user]);
 
-  const [credentialsUser, setCredentialsUser] = useState({
-    email: undefined,
-    password: undefined,
-    error: null,
-  });
+  const [credentialsUser, setCredentialsUser] = useState(
+    initialStateCredentials
+  );
 
   return (
     <WrapperPage>
       <WrapperButtons>
         <li>
-          <ButtonStyled disabled={user} onClick={() => setView('signup')}>
+          <ButtonStyled
+            disabled={user}
+            onClick={() => {
+              setView('signup');
+              setCredentialsUser(initialStateCredentials());
+            }}
+          >
             Sign Up
           </ButtonStyled>
         </li>
         <li>
-          <ButtonStyled disabled={user} onClick={() => setView('login')}>
+          <ButtonStyled
+            disabled={user}
+            onClick={() => {
+              setView('login');
+              setCredentialsUser(initialStateCredentials());
+            }}
+          >
             Log In
           </ButtonStyled>
         </li>
 
         <li>
-          <ButtonStyled disabled={!user} onClick={() => setView('myaccount')}>
+          <ButtonStyled onClick={() => setView('myaccount')}>
             My Account
           </ButtonStyled>
         </li>
       </WrapperButtons>
       {view === 'login' || view === 'signup' ? (
         <>
-          {view === 'login' ? <h1>Log In</h1> : <h1>Sign Up</h1>}
-          <FormLoginSignIn
+          <FormLoginSignUpStyled
             view={view}
             setView={setView}
             credentialsUser={credentialsUser}
@@ -58,5 +67,11 @@ const Account = () => {
     </WrapperPage>
   );
 };
+
+const initialStateCredentials = () => ({
+  email: '',
+  password: '',
+  error: null,
+});
 
 export default Account;

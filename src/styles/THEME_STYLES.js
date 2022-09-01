@@ -1,7 +1,7 @@
 export const THEME_STYLES = {
   BIG_SCREEN: '1400',
-  TABLET_SIZE: '950',
-  MOBILE_SIZE: '750',
+  TABLET_SIZE: '1050',
+  MOBILE_SIZE: '832',
   COLORS: {
     BLACK: '#000',
     BLACK_LIGHT: '#444',

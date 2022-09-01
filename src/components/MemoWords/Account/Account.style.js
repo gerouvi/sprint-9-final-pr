@@ -8,13 +8,11 @@ export const WrapperButtons = styled.ul`
 
   padding-top: 80px;
 
-  font-size: 0.7em;
-
   display: flex;
   justify-content: center;
   align-items: center;
 
-  gap: 30px;
+  gap: 20px;
 
   @media screen and (min-width: ${THEME_STYLES.MOBILE_SIZE}px) {
     font-size: 1em;
