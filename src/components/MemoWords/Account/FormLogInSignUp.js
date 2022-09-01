@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   logInFunction,
   signUpFunction,
@@ -12,61 +13,84 @@ const FormLoginSignIn = ({
   credentialsUser,
   setCredentialsUser,
   className,
-}) => (
-  <div className={className}>
-    {view === 'login' ? <h1>Log In</h1> : <h1>Sign Up</h1>}
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (view === 'login') {
-          handleLogIn(
-            credentialsUser.email,
-            credentialsUser.password,
-            setCredentialsUser,
-            setView
-          );
-        } else {
-          handleSignUp(
-            credentialsUser.email,
-            credentialsUser.password,
-            setCredentialsUser,
-            setView
-          );
-        }
-      }}
-    >
-      <div>
-        <label>Email:</label>
-        <InputStyled
-          value={credentialsUser.email}
-          type="email"
-          onChange={(e) =>
-            setCredentialsUser((prev) => ({
-              ...prev,
-              email: e.target.value,
-            }))
+}) => {
+  const [capsLock, setCapsLock] = useState({
+    email: false,
+    password: false,
+  });
+
+  return (
+    <div className={className}>
+      {view === 'login' ? <h1>Log In</h1> : <h1>Sign Up</h1>}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (view === 'login') {
+            handleLogIn(
+              credentialsUser.email,
+              credentialsUser.password,
+              setCredentialsUser,
+              setView
+            );
+          } else {
+            handleSignUp(
+              credentialsUser.email,
+              credentialsUser.password,
+              setCredentialsUser,
+              setView
+            );
           }
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <InputStyled
-          value={credentialsUser.password}
-          type="password"
-          onChange={(e) =>
-            setCredentialsUser((prev) => ({
-              ...prev,
-              password: e.target.value,
-            }))
-          }
-        />
-      </div>
-      <Button disabled={!credentialsUser.email || !credentialsUser.password}>
-        GO!
-      </Button>
-    </form>
-  </div>
-);
+        }}
+      >
+        <div>
+          <label>Email:</label>
+          <InputStyled
+            value={credentialsUser.email}
+            type="email"
+            onKeyUp={(e) => handleCapsLock(e, 'email', setCapsLock)}
+            onChange={(e) =>
+              setCredentialsUser((prev) => ({
+                ...prev,
+                email: e.target.value,
+              }))
+            }
+          />
+          {capsLock.email && <p>Caps Lock actived</p>}
+        </div>
+        <div>
+          <label>Password:</label>
+          <InputStyled
+            value={credentialsUser.password}
+            type="password"
+            onKeyUp={(e) => handleCapsLock(e, 'password', setCapsLock)}
+            onChange={(e) =>
+              setCredentialsUser((prev) => ({
+                ...prev,
+                password: e.target.value,
+              }))
+            }
+          />
+          {capsLock.password && <p>Caps Lock actived</p>}
+        </div>
+        <Button disabled={!credentialsUser.email || !credentialsUser.password}>
+          GO!
+        </Button>
+      </form>
+    </div>
+  );
+};
+
+const handleCapsLock = (e, option, setCapsLock) => {
+  console.log(e.getModifierState('CapsLock'));
+  if (e.getModifierState('CapsLock') && option === 'email')
+    setCapsLock((prev) => ({ ...prev, email: true }));
+  if (e.getModifierState('CapsLock') && option === 'password')
+    setCapsLock((prev) => ({ ...prev, password: true }));
+  if (!e.getModifierState('CapsLock') && option === 'email')
+    setCapsLock((prev) => ({ ...prev, email: false }));
+  if (!e.getModifierState('CapsLock') && option === 'password')
+    setCapsLock((prev) => ({ ...prev, password: false }));
+};
 
 const handleLogIn = async (email, password, setCredentialsUser, setView) => {
   setCredentialsUser((prev) => ({ ...prev, error: null }));
@@ -74,7 +98,7 @@ const handleLogIn = async (email, password, setCredentialsUser, setView) => {
     await logInFunction(email, password);
     setView(undefined);
   } catch (err) {
-    setCredentialsUser((prev) => ({ ...prev, error: err.message }));
+    setCredentialsUser((prev) => ({ ...prev, error: err.code }));
   }
 };
 
@@ -84,7 +108,7 @@ const handleSignUp = async (email, password, setCredentialsUser, setView) => {
     await signUpFunction(email, password);
     setView(undefined);
   } catch (err) {
-    setCredentialsUser((prev) => ({ ...prev, error: err.message }));
+    setCredentialsUser((prev) => ({ ...prev, error: err.code }));
   }
 };
 

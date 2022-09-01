@@ -23,3 +23,8 @@ export const WrapperButtons = styled.ul`
     list-style: none;
   }
 `;
+
+export const ErroMessage = styled.p`
+  text-align: center;
+  color: red;
+`;

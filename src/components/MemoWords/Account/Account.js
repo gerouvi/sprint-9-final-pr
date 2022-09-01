@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import WrapperPage from '../WrapperPage';
-import { WrapperButtons } from './Account.style';
+import { ErroMessage, WrapperButtons } from './Account.style';
 import { FormLoginSignUpStyled } from './FormLogInSignUp.styles';
 import MyAccount from './MyAccount';
 
@@ -18,6 +18,8 @@ const Account = () => {
   const [credentialsUser, setCredentialsUser] = useState(
     initialStateCredentials
   );
+
+  console.log(credentialsUser.error);
 
   return (
     <WrapperPage>
@@ -59,7 +61,17 @@ const Account = () => {
             credentialsUser={credentialsUser}
             setCredentialsUser={setCredentialsUser}
           />
-          <p>{credentialsUser.error}</p>
+          {credentialsUser.error === 'auth/weak-password' && (
+            <ErroMessage>Password short, at least 6 characters</ErroMessage>
+          )}
+          {credentialsUser.error === 'auth/email-already-in-use' && (
+            <ErroMessage>Email already in use</ErroMessage>
+          )}
+          {credentialsUser.error &&
+            credentialsUser.error !== 'auth/weak-password' &&
+            credentialsUser.error !== 'auth/email-already-in-use' && (
+              <ErroMessage>Credentials incorrects</ErroMessage>
+            )}
         </>
       ) : (
         <MyAccount />
