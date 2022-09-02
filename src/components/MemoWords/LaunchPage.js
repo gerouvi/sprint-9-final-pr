@@ -1,6 +1,7 @@
 import { TextDescription } from './LaunchPage.styles';
 import { THEME_STYLES } from '../../styles/THEME_STYLES';
 import WrapperPage from './WrapperPage';
+import { ButtonNeonStyled } from '../Buttons/ButtonNeon.styles';
 
 const LaunchPage = () => {
   return (
@@ -21,6 +22,7 @@ const LaunchPage = () => {
           <p>
             Go to account to Log In or Sign In if you don't have an account!
           </p>
+          <ButtonNeonStyled>Log In / Sign In</ButtonNeonStyled>
         </TextDescription>
       )}
     </WrapperPage>

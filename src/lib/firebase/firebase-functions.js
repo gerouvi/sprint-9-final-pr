@@ -1,8 +1,12 @@
+//https://firebase.google.com/docs/auth/web/email-link-auth?authuser=0&hl=es
+
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  updateEmail,
+  updatePassword,
 } from 'firebase/auth';
 import { addDoc, collection } from 'firebase/firestore';
 import { auth, db } from './firebase-config';
@@ -27,9 +31,21 @@ export const logOutFunction = () => {
   return signOut(auth);
 };
 
+export const updateEmailFunction = (newEmail) => {
+  return updateEmail(auth.currentUser, newEmail);
+};
+
+export const updatePasswordFunction = (newPassword) => {
+  return updatePassword(auth.currentUser, newPassword);
+};
+
 //Firestore
 
-// export const postFirestore = (user, data) => {
-//   const collectionRef = collection(db, user);
-//   return addDoc(collectionRef, data);
-// };
+const getCollection = () => {
+  return collection(db, auth.currentUser.uid);
+};
+
+export const postWordsFunction = (newWords) => {
+  const collectionRef = getCollection();
+  return addDoc(collectionRef, newWords);
+};

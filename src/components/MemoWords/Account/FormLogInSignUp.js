@@ -81,7 +81,6 @@ const FormLoginSignIn = ({
 };
 
 const handleCapsLock = (e, option, setCapsLock) => {
-  console.log(e.getModifierState('CapsLock'));
   if (e.getModifierState('CapsLock') && option === 'email')
     setCapsLock((prev) => ({ ...prev, email: true }));
   if (e.getModifierState('CapsLock') && option === 'password')
@@ -92,21 +91,20 @@ const handleCapsLock = (e, option, setCapsLock) => {
     setCapsLock((prev) => ({ ...prev, password: false }));
 };
 
-const handleLogIn = async (email, password, setCredentialsUser, setView) => {
+const handleLogIn = async (email, password, setCredentialsUser) => {
   setCredentialsUser((prev) => ({ ...prev, error: null }));
   try {
     await logInFunction(email, password);
-    setView(undefined);
   } catch (err) {
     setCredentialsUser((prev) => ({ ...prev, error: err.code }));
   }
 };
 
-const handleSignUp = async (email, password, setCredentialsUser, setView) => {
+const handleSignUp = async (email, password, setCredentialsUser) => {
   setCredentialsUser((prev) => ({ ...prev, error: null }));
   try {
     await signUpFunction(email, password);
-    setView(undefined);
+    console.log('ok');
   } catch (err) {
     setCredentialsUser((prev) => ({ ...prev, error: err.code }));
   }

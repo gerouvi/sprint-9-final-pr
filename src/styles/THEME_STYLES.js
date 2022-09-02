@@ -9,8 +9,11 @@ export const THEME_STYLES = {
     GRAY: '#2c2b2b',
     WHITE: '#fff',
   },
-  BORDER_RADIUS_SCREEN_MOBILE: '23px',
   BORDER_RADIUS: {
+    SCREEN_MOBILE: '23px',
     SM: '.5em',
+  },
+  BOX_SHADOW: {
+    SM: '0.5rem',
   },
 };

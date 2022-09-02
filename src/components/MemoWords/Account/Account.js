@@ -19,8 +19,6 @@ const Account = () => {
     initialStateCredentials
   );
 
-  console.log(credentialsUser.error);
-
   return (
     <WrapperPage>
       <WrapperButtons>
