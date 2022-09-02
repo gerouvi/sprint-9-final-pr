@@ -1,4 +1,31 @@
-import { postWordsFunction } from './firebase-functions';
+import {
+  logInFunction,
+  postWordsFunction,
+  signUpFunction,
+} from './firebase-functions';
+
+//Auth
+
+export const handleLogIn = async (email, password, setCredentialsUser) => {
+  setCredentialsUser((prev) => ({ ...prev, error: null }));
+  try {
+    await logInFunction(email, password);
+  } catch (err) {
+    setCredentialsUser((prev) => ({ ...prev, error: err.code }));
+  }
+};
+
+export const handleSignUp = async (email, password, setCredentialsUser) => {
+  setCredentialsUser((prev) => ({ ...prev, error: null }));
+  try {
+    await signUpFunction(email, password);
+    console.log('ok');
+  } catch (err) {
+    setCredentialsUser((prev) => ({ ...prev, error: err.code }));
+  }
+};
+
+//Firestore
 
 export const handlePostWords = async (addWords, setError) => {
   try {

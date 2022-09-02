@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import {
-  logInFunction,
-  signUpFunction,
-} from '../../../lib/firebase/firebase-functions';
+  handleLogIn,
+  handleSignUp,
+} from '../../../lib/firebase/firebase-handlers';
+import handleAreCapsLock from '../../../lib/functions/areCapsLock';
 import { InputStyled } from '../../Form/Input.styles';
 
 import { Button } from './FormLogInSignUp.styles';
@@ -47,7 +48,7 @@ const FormLoginSignIn = ({
           <InputStyled
             value={credentialsUser.email}
             type="email"
-            onKeyUp={(e) => handleCapsLock(e, 'email', setCapsLock)}
+            onKeyUp={(e) => handleAreCapsLock(e, 'email', setCapsLock)}
             onChange={(e) =>
               setCredentialsUser((prev) => ({
                 ...prev,
@@ -62,7 +63,7 @@ const FormLoginSignIn = ({
           <InputStyled
             value={credentialsUser.password}
             type="password"
-            onKeyUp={(e) => handleCapsLock(e, 'password', setCapsLock)}
+            onKeyUp={(e) => handleAreCapsLock(e, 'password', setCapsLock)}
             onChange={(e) =>
               setCredentialsUser((prev) => ({
                 ...prev,
@@ -78,36 +79,6 @@ const FormLoginSignIn = ({
       </form>
     </div>
   );
-};
-
-const handleCapsLock = (e, option, setCapsLock) => {
-  if (e.getModifierState('CapsLock') && option === 'email')
-    setCapsLock((prev) => ({ ...prev, email: true }));
-  if (e.getModifierState('CapsLock') && option === 'password')
-    setCapsLock((prev) => ({ ...prev, password: true }));
-  if (!e.getModifierState('CapsLock') && option === 'email')
-    setCapsLock((prev) => ({ ...prev, email: false }));
-  if (!e.getModifierState('CapsLock') && option === 'password')
-    setCapsLock((prev) => ({ ...prev, password: false }));
-};
-
-const handleLogIn = async (email, password, setCredentialsUser) => {
-  setCredentialsUser((prev) => ({ ...prev, error: null }));
-  try {
-    await logInFunction(email, password);
-  } catch (err) {
-    setCredentialsUser((prev) => ({ ...prev, error: err.code }));
-  }
-};
-
-const handleSignUp = async (email, password, setCredentialsUser) => {
-  setCredentialsUser((prev) => ({ ...prev, error: null }));
-  try {
-    await signUpFunction(email, password);
-    console.log('ok');
-  } catch (err) {
-    setCredentialsUser((prev) => ({ ...prev, error: err.code }));
-  }
 };
 
 export default FormLoginSignIn;
