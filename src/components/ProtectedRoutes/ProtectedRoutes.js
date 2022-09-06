@@ -9,7 +9,8 @@ const ProtectedRoutes = ({ children }) => {
 
   useEffect(() => {
     if (!user) navigate('/account');
-  });
+    else if (!user.emailVerified) navigate('/account');
+  }, [navigate, user]);
 
   return children;
 };

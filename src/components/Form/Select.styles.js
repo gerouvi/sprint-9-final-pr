@@ -3,7 +3,7 @@ import { THEME_STYLES } from '../../styles/THEME_STYLES';
 import Select from './Select';
 
 export const SelectStyled = styled(Select)`
-  width: ${({ width }) => (width ? width : '100%')};
+  width: 150px;
   height: 2.5rem;
   padding: 0.5rem 1rem;
   border: none;

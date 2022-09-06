@@ -7,6 +7,7 @@ export const Header = styled.header`
     padding: 0 40px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 `;
 

@@ -1,20 +1,7 @@
 import styled from 'styled-components';
-import FormLoginSignIn from './FormLogInSignUp';
+import ButtonRounded from './ButtonRounded';
 
-export const FormLoginSignUpStyled = styled(FormLoginSignIn)`
-  text-align: center;
-  padding-top: 30px;
-
-  & form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
-  }
-`;
-
-export const Button = styled.button`
+export const ButtonRoundedStyled = styled(ButtonRounded)`
   border: 1px solid black;
   border-radius: 50%;
   background: none;
@@ -30,5 +17,9 @@ export const Button = styled.button`
     border: none;
     box-shadow: none;
     cursor: initial;
+  }
+
+  &:active {
+    transform: scale(0.8);
   }
 `;

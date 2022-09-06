@@ -4,15 +4,15 @@ import { ThemeProvider } from 'styled-components';
 import { FrameStyled } from './components/MobileFrame/Frame.styles';
 import GlobalStyles from './styles/GolablStyles';
 import { THEME_STYLES } from './styles/THEME_STYLES';
-import Translate from './components/MemoWords/Translate';
-import AddWords from './components/MemoWords/AddWords';
-import WordsList from './components/MemoWords/WordsList';
-import Games from './components/MemoWords/Games';
+import WordsList from './components/MemoWords/WordsList/WordsList';
 import CustomUserAuthProvider from './components/providers/CustomUserAuthProvider';
 import ProtectedRoutes from './components/ProtectedRoutes/ProtectedRoutes';
-import LaunchPage from './components/MemoWords/LaunchPage';
 import Account from './components/MemoWords/Account/Account';
 import LauncherMobile from './components/MobileFrame/LauncherMobile';
+import AddWords from './components/MemoWords/AddWords/AddWords';
+import Games from './components/MemoWords/Games/Games';
+import LaunchPage from './components/MemoWords/LaunchPage/LaunchPage';
+import Translate from './components/MemoWords/Translate/Translate';
 
 function App() {
   const [showMobileDevice, setShowMobileDevice] = useState(true);
@@ -20,7 +20,6 @@ function App() {
   return (
     <ThemeProvider theme={THEME_STYLES}>
       <GlobalStyles />
-
       <CustomUserAuthProvider>
         <BrowserRouter>
           <Routes>

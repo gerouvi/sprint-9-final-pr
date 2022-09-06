@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
+import { ACCOUNT_OPTIONS } from '../../../lib/constants/accountOptions';
 import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import WrapperPage from '../WrapperPage';
-import { ErroMessage, WrapperButtons } from './Account.style';
-import { FormLoginSignUpStyled } from './FormLogInSignUp.styles';
+import { WrapperButtons, WrapperVerifiedMessage } from './Account.style';
 import MyAccount from './MyAccount';
+import SignInForm from './SignInForm';
+import SignUpForm from './SignUpForm';
 
 const Account = () => {
   const [view, setView] = useState('signup');
@@ -12,12 +14,26 @@ const Account = () => {
   const { user } = useContext(UserAuthContext);
 
   useEffect(() => {
-    if (user) setView('myacoount');
+    if (user) setView(ACCOUNT_OPTIONS.MY_ACCOUNT);
+    else if (localStorage.getItem('emailMemoWords'))
+      setView(ACCOUNT_OPTIONS.SIGN_IN);
   }, [user]);
 
-  const [credentialsUser, setCredentialsUser] = useState(
-    initialStateCredentials
-  );
+  if (user && !user.emailVerified)
+    return (
+      <WrapperPage>
+        <WrapperVerifiedMessage>
+          <p>
+            You have to verify your email address! Make sure you checked your
+            spams!
+          </p>
+          <p>{user.email}</p>
+          <ButtonStyled color="red" onClick={() => window.location.reload()}>
+            Email verified? Click!
+          </ButtonStyled>
+        </WrapperVerifiedMessage>
+      </WrapperPage>
+    );
 
   return (
     <WrapperPage>
@@ -26,8 +42,7 @@ const Account = () => {
           <ButtonStyled
             disabled={user}
             onClick={() => {
-              setView('signup');
-              setCredentialsUser(initialStateCredentials());
+              setView(ACCOUNT_OPTIONS.SIGN_UP);
             }}
           >
             Sign Up
@@ -37,51 +52,24 @@ const Account = () => {
           <ButtonStyled
             disabled={user}
             onClick={() => {
-              setView('login');
-              setCredentialsUser(initialStateCredentials());
+              setView(ACCOUNT_OPTIONS.SIGN_IN);
             }}
           >
-            Log In
+            Sign In
           </ButtonStyled>
         </li>
 
         <li>
-          <ButtonStyled onClick={() => setView('myaccount')}>
+          <ButtonStyled onClick={() => setView(ACCOUNT_OPTIONS.MY_ACCOUNT)}>
             My Account
           </ButtonStyled>
         </li>
       </WrapperButtons>
-      {view === 'login' || view === 'signup' ? (
-        <>
-          <FormLoginSignUpStyled
-            view={view}
-            setView={setView}
-            credentialsUser={credentialsUser}
-            setCredentialsUser={setCredentialsUser}
-          />
-          {credentialsUser.error === 'auth/weak-password' && (
-            <ErroMessage>Password short, at least 6 characters</ErroMessage>
-          )}
-          {credentialsUser.error === 'auth/email-already-in-use' && (
-            <ErroMessage>Email already in use</ErroMessage>
-          )}
-          {credentialsUser.error &&
-            credentialsUser.error !== 'auth/weak-password' &&
-            credentialsUser.error !== 'auth/email-already-in-use' && (
-              <ErroMessage>Credentials incorrects</ErroMessage>
-            )}
-        </>
-      ) : (
-        <MyAccount />
-      )}
+      <SignUpForm view={view} />
+      <SignInForm view={view} />
+      <MyAccount view={view} />
     </WrapperPage>
   );
 };
-
-const initialStateCredentials = () => ({
-  email: '',
-  password: '',
-  error: null,
-});
 
 export default Account;

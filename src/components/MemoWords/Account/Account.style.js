@@ -24,7 +24,26 @@ export const WrapperButtons = styled.ul`
   }
 `;
 
-export const ErroMessage = styled.p`
+export const ErrorMessage = styled.p`
   text-align: center;
   color: red;
+`;
+
+export const WrapperVerifiedMessage = styled.div`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+
+  & div p button {
+    border: none;
+    background-color: transparent;
+    color: blue;
+    cursor: pointer;
+  }
+  & div p button:active {
+    transform: scale(0.8);
+  }
 `;

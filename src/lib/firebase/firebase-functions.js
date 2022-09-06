@@ -1,5 +1,3 @@
-//https://firebase.google.com/docs/auth/web/email-link-auth?authuser=0&hl=es
-
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -7,8 +5,22 @@ import {
   signOut,
   updateEmail,
   updatePassword,
+  deleteUser,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from 'firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
 import { auth, db } from './firebase-config';
 
 //Auth
@@ -19,15 +31,19 @@ export const isUserConnected = (setUser) => {
   });
 };
 
-export const signUpFunction = (email, password) => {
+export const createUserWithEmailAndPasswordFunction = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
-export const logInFunction = (email, password) => {
+export const sendEmailVerificationFunction = () => {
+  return sendEmailVerification(auth.currentUser);
+};
+
+export const signInWithEmailAndPasswordFunction = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const logOutFunction = () => {
+export const signOutFunction = () => {
   return signOut(auth);
 };
 
@@ -39,13 +55,53 @@ export const updatePasswordFunction = (newPassword) => {
   return updatePassword(auth.currentUser, newPassword);
 };
 
-//Firestore
-
-const getCollection = () => {
-  return collection(db, auth.currentUser.uid);
+export const reauthenticateWithCredentialFunction = (password) => {
+  const credential = EmailAuthProvider.credential(
+    auth.currentUser.email,
+    password
+  );
+  return reauthenticateWithCredential(auth.currentUser, credential);
 };
 
-export const postWordsFunction = (newWords) => {
-  const collectionRef = getCollection();
-  return addDoc(collectionRef, newWords);
+export const deleteUserFunction = () => {
+  return deleteUser(auth.currentUser);
+};
+
+export const sendPasswordResetEmailFunction = (email) => {
+  return sendPasswordResetEmail(auth, email);
+};
+
+//Firestore
+
+export const getUid = () => {
+  return auth.currentUser.uid;
+};
+
+export const getServerTimestamp = () => {
+  return serverTimestamp();
+};
+
+export const getDocsFunction = (path) => {
+  const collectionRef = collection(db, path);
+  return getDocs(collectionRef);
+};
+
+export const getDocFunction = (path) => {
+  const docRef = doc(db, 'users', path);
+  return getDoc(docRef);
+};
+
+export const setDocFunction = (path, newDoc) => {
+  const docRef = doc(db, 'users', path);
+  return setDoc(docRef, newDoc);
+};
+
+export const addDocFunction = (path, newData) => {
+  const collectionRef = collection(db, path);
+  return addDoc(collectionRef, { ...newData });
+};
+
+export const deletDocsFunction = (path) => {
+  const docRef = doc(db, 'users', path);
+  return deleteDoc(docRef);
 };

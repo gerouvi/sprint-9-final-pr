@@ -1,11 +1,11 @@
-import { languagesOptions } from '../../lib/constants/langaugesOptions';
-import { handlePostWords } from '../../lib/firebase/firebase-handlers';
-import { useAddWords } from '../../lib/hooks/useAddWords';
-import { ButtonStyled } from '../Buttons/Button.styles';
-import { InputStyled } from '../Form/Input.styles';
-import { SelectStyled } from '../Form/Select.styles';
+import { languagesOptions } from '../../../lib/constants/langaugesOptions';
+import { useAddWords } from '../../../lib/hooks/useAddWords';
+import { ButtonStyled } from '../../Buttons/Button.styles';
+import { InputStyled } from '../../Form/Input.styles';
+import { SelectStyled } from '../../Form/Select.styles';
 import { Wrapper } from './AddWords.styles';
-import WrapperPage from './WrapperPage';
+import WrapperPage from '../WrapperPage';
+import { handlePostWords } from '../../../lib/firebase/firebase-handlers-firestore';
 
 const AddWords = () => {
   const {
@@ -25,7 +25,13 @@ const AddWords = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handlePostWords(addWords, setError);
+            handlePostWords(
+              addWords.word1,
+              addWords.option1,
+              addWords.word2,
+              addWords.option2,
+              setError
+            );
             setInitialStateAddWords();
           }}
         >
@@ -33,7 +39,6 @@ const AddWords = () => {
             <SelectStyled
               value={addWords.option1}
               onChange={(e) => setOption1(e.target.value)}
-              width="40%"
             >
               {languagesOptions.map((language) => (
                 <option key={language.name} value={language.name}>
@@ -42,7 +47,6 @@ const AddWords = () => {
               ))}
             </SelectStyled>
             <InputStyled
-              width="70%"
               value={addWords.word1}
               onChange={(e) => setWord1(e.target.value)}
             />
@@ -50,7 +54,6 @@ const AddWords = () => {
 
           <div>
             <SelectStyled
-              width="40%"
               value={addWords.option2}
               onChange={(e) => setOption2(e.target.value)}
             >
@@ -61,7 +64,6 @@ const AddWords = () => {
               ))}
             </SelectStyled>
             <InputStyled
-              width="70%"
               value={addWords.word2}
               onChange={(e) => setWord2(e.target.value)}
             />

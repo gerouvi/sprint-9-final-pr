@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { THEME_STYLES } from '../../styles/THEME_STYLES';
+import { THEME_STYLES } from '../../../styles/THEME_STYLES';
 
 export const Wrapper = styled.div`
   text-align: center;
@@ -22,5 +22,10 @@ export const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     gap: 50px;
+
+    & div {
+      display: flex;
+      flex-direction: column;
+    }
   }
 `;

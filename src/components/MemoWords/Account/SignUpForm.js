@@ -1,46 +1,38 @@
 import { useState } from 'react';
-import {
-  handleLogIn,
-  handleSignUp,
-} from '../../../lib/firebase/firebase-handlers';
+import { ACCOUNT_OPTIONS } from '../../../lib/constants/accountOptions';
+import { handleCreateUserWithEmailAndPassword } from '../../../lib/firebase/firebase-handlers-auth';
 import handleAreCapsLock from '../../../lib/functions/areCapsLock';
+import { ButtonRoundedStyled } from '../../Buttons/ButtonRounded.styles';
 import { InputStyled } from '../../Form/Input.styles';
+import { ErrorMessage, Wrapper } from './SignInSignUpForm.styles';
 
-import { Button } from './FormLogInSignUp.styles';
+const SignUpForm = ({ view }) => {
+  const [credentialsUser, setCredentialsUser] = useState({
+    email: '',
+    password: '',
+    error: undefined,
+  });
 
-const FormLoginSignIn = ({
-  view,
-  setView,
-  credentialsUser,
-  setCredentialsUser,
-  className,
-}) => {
   const [capsLock, setCapsLock] = useState({
     email: false,
     password: false,
   });
 
+  if (view !== ACCOUNT_OPTIONS.SIGN_UP) return null;
+
   return (
-    <div className={className}>
-      {view === 'login' ? <h1>Log In</h1> : <h1>Sign Up</h1>}
+    <Wrapper>
+      <h1>Sign Up</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (view === 'login') {
-            handleLogIn(
-              credentialsUser.email,
-              credentialsUser.password,
-              setCredentialsUser,
-              setView
-            );
-          } else {
-            handleSignUp(
-              credentialsUser.email,
-              credentialsUser.password,
-              setCredentialsUser,
-              setView
-            );
-          }
+          localStorage.setItem('emailMemoWords', credentialsUser.email);
+
+          handleCreateUserWithEmailAndPassword(
+            credentialsUser.email,
+            credentialsUser.password,
+            setCredentialsUser
+          );
         }}
       >
         <div>
@@ -73,12 +65,15 @@ const FormLoginSignIn = ({
           />
           {capsLock.password && <p>Caps Lock actived</p>}
         </div>
-        <Button disabled={!credentialsUser.email || !credentialsUser.password}>
-          GO!
-        </Button>
+        <ButtonRoundedStyled
+          disabled={!credentialsUser.email || !credentialsUser.password}
+        >
+          Go!
+        </ButtonRoundedStyled>
+        <ErrorMessage>{credentialsUser.error}</ErrorMessage>
       </form>
-    </div>
+    </Wrapper>
   );
 };
 
-export default FormLoginSignIn;
+export default SignUpForm;

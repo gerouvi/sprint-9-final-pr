@@ -27,7 +27,7 @@ export const useAddWords = () => {
   const setOption2 = (newOption) => {
     setAddWords((prev) => ({
       ...prev,
-      option1: newOption,
+      option2: newOption,
     }));
   };
   const setWord2 = (newOption) => {

@@ -3,7 +3,7 @@ import { UserAuthContext } from '../../lib/contexts/UserAuthContext';
 import { isUserConnected } from '../../lib/firebase/firebase-functions';
 
 const CustomUserAuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     isUserConnected(setUser);

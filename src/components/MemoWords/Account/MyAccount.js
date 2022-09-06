@@ -1,62 +1,32 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
+import { ACCOUNT_OPTIONS } from '../../../lib/constants/accountOptions';
 import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
-import {
-  updateEmailFunction,
-  updatePasswordFunction,
-} from '../../../lib/firebase/firebase-functions';
+import ButtonDeleteAccount from './ButtonDeleteAccount';
+import ChangeEmailForm from './ChangeEmailForm';
+import ChangePasswordForm from './ChangePasswordForm';
+import { Wrapper } from './MyAccount.styles';
 
-const MyAccount = () => {
+const MyAccount = ({ view }) => {
   const { user } = useContext(UserAuthContext);
 
-  const [newEmail, setNewEmail] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  if (view !== ACCOUNT_OPTIONS.MY_ACCOUNT) return null;
 
-  if (!user) return <h1>No user</h1>;
+  if (!user)
+    return (
+      <Wrapper>
+        <h1>No user</h1>
+      </Wrapper>
+    );
+
   return (
-    <>
+    <Wrapper>
       <h1>My Account</h1>
       <p>{user.email}</p>
-      <form
-        onSubmit={(e) => {
-          console.log('here');
-          e.preventDefault();
-          handleUpdateEmail(newEmail);
-        }}
-      >
-        <label>Cambiar email:</label>
-        <input onChange={(e) => setNewEmail(e.target.value)} />
-        <button>Update!</button>
-      </form>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleUpdatePassword(newPassword);
-        }}
-      >
-        <label>Cambiar password:</label>
-        <input onChange={(e) => setNewEmail(e.target.value)} />
-        <button>Update!</button>
-      </form>
-    </>
+      <ChangeEmailForm />
+      <ChangePasswordForm />
+      <ButtonDeleteAccount />
+    </Wrapper>
   );
-};
-
-const handleUpdateEmail = async (newEmail) => {
-  try {
-    await updateEmailFunction(newEmail);
-    console.log('ok');
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const handleUpdatePassword = async (newEmail) => {
-  try {
-    await updatePasswordFunction(newEmail);
-    console.log('ok');
-  } catch (err) {
-    console.log(err);
-  }
 };
 
 export default MyAccount;

@@ -4,6 +4,7 @@ import { THEME_STYLES } from '../../styles/THEME_STYLES';
 export const Wrapper = styled.div`
   position: relative;
   min-height: 100vh;
+  padding-bottom: 20px;
 
   background-image: url(${(props) => props.bg});
   background-size: cover;
