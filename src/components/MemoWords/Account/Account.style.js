@@ -30,6 +30,7 @@ export const ErrorMessage = styled.p`
 `;
 
 export const WrapperVerifiedMessage = styled.div`
+  padding-top: 70px;
   text-align: center;
   display: flex;
   flex-direction: column;

@@ -1,10 +1,9 @@
-import { Wrapper } from './WrapperPage.styles';
-
-import bg from '../../assets/backgrounds/bg4.png';
-import { THEME_STYLES } from '../../styles/THEME_STYLES';
+import bg from '../../../assets/backgrounds/bg4.png';
+import { THEME_STYLES } from '../../../styles/THEME_STYLES';
 import MenuNav from './MenuNav';
 import { Link } from 'react-router-dom';
-import { ButtonGoBackStyled } from '../Buttons/ButtonGoBack.styles';
+import { ButtonGoBackStyled } from '../../Buttons/ButtonGoBack.styles';
+import { Wrapper } from './WrapperPage.styles';
 
 const WrapperPage = ({ children }) => {
   const pathName = window.location.pathname.replace('/', '');

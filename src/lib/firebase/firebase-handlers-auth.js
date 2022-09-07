@@ -53,57 +53,40 @@ export const handleSignInWithEmailAndPassword = async (
 export const handleUpdateEmail = async (
   newEmail,
   password,
-  setModalMessageActionFinished
+  setOpenModalMessage
 ) => {
   try {
     await reauthenticateWithCredentialFunction(password);
     await updateEmailFunction(newEmail);
 
-    setModalMessageActionFinished({
-      isOpen: true,
-      message:
-        'Email changed, we have send you a link to your former email address to finish the process. Make sure you checked your spams!',
-    });
+    setOpenModalMessage(
+      'Email changed. We have send you a link to your former email address to finish the process. Make sure you checked your spams!'
+    );
   } catch (err) {
     console.log(err);
     const strError = stringError(err.code);
-
-    setModalMessageActionFinished({
-      isOpen: true,
-      message: strError,
-    });
+    setOpenModalMessage(strError);
   }
 };
 
 export const handleUpdatePassword = async (
   newPassword,
   password,
-  setModalMessageActionFinished
+  setOpenModalMessage
 ) => {
   try {
     await reauthenticateWithCredentialFunction(password);
     await updatePasswordFunction(newPassword);
-
-    setModalMessageActionFinished({
-      isOpen: true,
-      message: 'Password changed',
-    });
+    setOpenModalMessage('Password Changed');
   } catch (err) {
     console.log(err);
     const strError = stringError(err.code);
-
-    setModalMessageActionFinished({
-      isOpen: true,
-      message: strError,
-    });
+    console.log(strError);
+    setOpenModalMessage(strError);
   }
 };
 
-export const handleDeleteUser = async (
-  uid,
-  password,
-  setModalMessageActionFinished
-) => {
+export const handleDeleteUser = async (uid, password, setOpenModalMessage) => {
   try {
     await reauthenticateWithCredentialFunction(password);
     await deleteUserFunction(uid);
@@ -111,30 +94,20 @@ export const handleDeleteUser = async (
   } catch (err) {
     console.log(err);
     const strError = stringError(err.code);
-
-    setModalMessageActionFinished({
-      isOpen: true,
-      message: strError,
-    });
+    setOpenModalMessage(strError);
   }
 };
 
 export const handdleSendPasswordResetEmail = async (
   email,
-  setModalMessageActionFinished
+  setOpenModalMessage
 ) => {
   try {
     await sendPasswordResetEmailFunction(email);
-    setModalMessageActionFinished({
-      isOpen: true,
-      message: 'Email sended',
-    });
+    setOpenModalMessage('Email sended');
   } catch (err) {
     console.log(err);
     const strError = stringError(err.code);
-    setModalMessageActionFinished({
-      isOpen: true,
-      message: strError,
-    });
+    setOpenModalMessage(strError);
   }
 };

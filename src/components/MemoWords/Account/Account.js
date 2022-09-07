@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ACCOUNT_OPTIONS } from '../../../lib/constants/accountOptions';
 import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import { ButtonStyled } from '../../Buttons/Button.styles';
-import WrapperPage from '../WrapperPage';
+import WrapperPage from '../Wrappers/WrapperPage';
 import { WrapperButtons, WrapperVerifiedMessage } from './Account.style';
 import MyAccount from './MyAccount';
 import SignInForm from './SignInForm';

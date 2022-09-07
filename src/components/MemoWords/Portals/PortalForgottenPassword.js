@@ -19,24 +19,26 @@ const PortalForgottenPassword = ({
             value={emailToSendForgottenPassword}
             onChange={(e) => setEmailToSendForgottenPassword(e.target.value)}
           />
-          <ButtonStyled
-            color="green"
-            onClick={() => {
-              triggerFunction();
-            }}
-          >
-            Send
-          </ButtonStyled>
-          <ButtonStyled
-            color="red"
-            type="button"
-            onClick={() => {
-              closeModal();
-              setEmailToSendForgottenPassword('');
-            }}
-          >
-            Cancel
-          </ButtonStyled>
+          <div>
+            <ButtonStyled
+              color="green"
+              onClick={() => {
+                triggerFunction();
+              }}
+            >
+              Send
+            </ButtonStyled>
+            <ButtonStyled
+              color="red"
+              type="button"
+              onClick={() => {
+                closeModal();
+                setEmailToSendForgottenPassword('');
+              }}
+            >
+              Cancel
+            </ButtonStyled>
+          </div>
         </Wrapper>
       </Portal>
     </>

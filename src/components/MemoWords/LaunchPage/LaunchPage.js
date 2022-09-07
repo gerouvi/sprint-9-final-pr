@@ -1,6 +1,7 @@
 import { THEME_STYLES } from '../../../styles/THEME_STYLES';
 import { ButtonNeonStyled } from '../../Buttons/ButtonNeon.styles';
-import WrapperPage from '../WrapperPage';
+import WrapperPage from '../Wrappers/WrapperPage';
+
 import { TextDescription } from './LaunchPage.styles';
 
 const LaunchPage = () => {

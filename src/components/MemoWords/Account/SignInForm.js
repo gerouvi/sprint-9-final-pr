@@ -4,7 +4,10 @@ import {
   handdleSendPasswordResetEmail,
   handleSignInWithEmailAndPassword,
 } from '../../../lib/firebase/firebase-handlers-auth';
-import handleAreCapsLock from '../../../lib/functions/areCapsLock';
+import useAreAreCapsLockEmailAndPassword from '../../../lib/hooks/useAreCapsLockEmailAndPassword';
+
+import usePortalForgottenPassword from '../../../lib/hooks/usePortalForgottenPassword';
+import usePortalMessage from '../../../lib/hooks/usePortalMessage';
 import { ButtonRoundedStyled } from '../../Buttons/ButtonRounded.styles';
 import { InputStyled } from '../../Form/Input.styles';
 import PortalForgottenPassword from '../Portals/PortalForgottenPassword';
@@ -18,27 +21,27 @@ const SignInForm = ({ view }) => {
     error: undefined,
   });
 
-  const [capsLock, setCapsLock] = useState({
-    email: false,
-    password: false,
-  });
+  const {
+    portalForgottenPassword,
+    setOpenPortalForgottenPassword,
+    setClosePortalForgottenPassword,
+    setEmailPortalForgottenPassword,
+  } = usePortalForgottenPassword();
 
-  const [modalForgottenPasswordIsOpen, setModalForgottenPasswordIsOpen] =
-    useState(false);
+  const { portalMessage, setOpenPortalMessage, setClosePortalMessage } =
+    usePortalMessage();
 
-  const [emailToSendForgottenPassword, setEmailToSendForgottenPassword] =
-    useState('');
-
-  const [modalMessageActionFinished, setModalMessageActionFinished] = useState({
-    isOpen: false,
-    message: undefined,
-  });
+  const {
+    areCapsLockEmailAndPassword,
+    setEmailAreCapsLockEmailAndPassword,
+    setPasswordAreCapsLockEmailAndPassword,
+  } = useAreAreCapsLockEmailAndPassword();
 
   const sendForgottenPassword = () => {
-    setModalForgottenPasswordIsOpen(false);
+    setOpenPortalForgottenPassword();
     handdleSendPasswordResetEmail(
-      emailToSendForgottenPassword,
-      setModalMessageActionFinished
+      portalForgottenPassword.email,
+      setOpenPortalMessage
     );
   };
 
@@ -63,7 +66,7 @@ const SignInForm = ({ view }) => {
           <InputStyled
             value={credentialsUser.email}
             type="email"
-            onKeyUp={(e) => handleAreCapsLock(e, 'email', setCapsLock)}
+            onKeyUp={(e) => setEmailAreCapsLockEmailAndPassword(e)}
             onChange={(e) =>
               setCredentialsUser((prev) => ({
                 ...prev,
@@ -71,14 +74,14 @@ const SignInForm = ({ view }) => {
               }))
             }
           />
-          {capsLock.email && <p>Caps Lock actived</p>}
+          {areCapsLockEmailAndPassword.email && <p>Caps Lock actived</p>}
         </div>
         <div>
           <label>Password:</label>
           <InputStyled
             value={credentialsUser.password}
             type="password"
-            onKeyUp={(e) => handleAreCapsLock(e, 'password', setCapsLock)}
+            onKeyUp={(e) => setPasswordAreCapsLockEmailAndPassword(e)}
             onChange={(e) =>
               setCredentialsUser((prev) => ({
                 ...prev,
@@ -86,7 +89,7 @@ const SignInForm = ({ view }) => {
               }))
             }
           />
-          {capsLock.password && <p>Caps Lock actived</p>}
+          {areCapsLockEmailAndPassword.password && <p>Caps Lock actived</p>}
         </div>
         <div>
           <ButtonRoundedStyled
@@ -97,25 +100,20 @@ const SignInForm = ({ view }) => {
         </div>
         <ErrorMessage>{credentialsUser.error}</ErrorMessage>
       </form>
-      <LinkText
-        type="button"
-        onClick={() => setModalForgottenPasswordIsOpen(true)}
-      >
+      <LinkText type="button" onClick={setOpenPortalForgottenPassword}>
         Forgotten your password?
       </LinkText>
       <PortalForgottenPassword
         triggerFunction={sendForgottenPassword}
-        modalForgottenPasswordIsOpen={modalForgottenPasswordIsOpen}
-        closeModal={() => setModalForgottenPasswordIsOpen(false)}
-        emailToSendForgottenPassword={emailToSendForgottenPassword}
-        setEmailToSendForgottenPassword={setEmailToSendForgottenPassword}
+        modalForgottenPasswordIsOpen={portalForgottenPassword.isOpen}
+        closeModal={setClosePortalForgottenPassword}
+        emailToSendForgottenPassword={portalForgottenPassword.email}
+        setEmailToSendForgottenPassword={setEmailPortalForgottenPassword}
       />
       <PortalMessage
-        isModalOpen={modalMessageActionFinished.isOpen}
-        message={modalMessageActionFinished.message}
-        closeModal={() =>
-          setModalMessageActionFinished((prev) => ({ ...prev, isOpen: false }))
-        }
+        isModalOpen={portalMessage.isOpen}
+        message={portalMessage.message}
+        closeModal={setClosePortalMessage}
       />
     </Wrapper>
   );

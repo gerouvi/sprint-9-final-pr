@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
-import { ButtonStyled } from '../Buttons/Button.styles';
+import { ButtonStyled } from '../../Buttons/Button.styles';
 import { useContext } from 'react';
-import { UserAuthContext } from '../../lib/contexts/UserAuthContext';
-
+import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import { Header, LogOutButton, NavMenu, WrapperLogo } from './MenuNav.styles';
+import logoMenu from '../../../assets/images/memoWordsWhite.png';
+import logoLogOut from '../../../assets/images/logout2.png';
 
-import logoMenu from '../../assets/images/memoWordsWhite.png';
-import logoLogOut from '../../assets/images/logout2.png';
-import { THEME_STYLES } from '../../styles/THEME_STYLES';
-import { signOutFunction } from '../../lib/firebase/firebase-functions';
+import { signOutFunction } from '../../../lib/firebase/firebase-functions';
+import { THEME_STYLES } from '../../../styles/THEME_STYLES';
 
 const MenuNav = () => {
   const { user } = useContext(UserAuthContext);

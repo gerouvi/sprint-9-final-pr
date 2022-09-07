@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { handleUpdateEmail } from '../../../lib/firebase/firebase-handlers-auth';
+import usePortalConfirmPassword from '../../../lib/hooks/usePortalConfirmPassword';
+
+import usePortalMessage from '../../../lib/hooks/usePortalMessage';
 
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import { InputStyled } from '../../Form/Input.styles';
@@ -8,22 +11,27 @@ import PortalMessage from '../Portals/PortalMessage';
 import { Wrapper } from './ChangeEmailForm.styles';
 
 const ChangeEmailForm = () => {
-  const [newData, setNewData] = useState('');
-  const [password, setPassword] = useState('');
+  const [newEmail, setNewEmail] = useState('');
 
-  const [isModalPasswordOpen, setIsModalPasswordOpen] = useState(false);
+  const {
+    portalConfirmPassword,
+    setOpenPortalConfirmPassword,
+    setClosePortalConfirmPassword,
+    setPasswordPortalConfirmPassword,
+  } = usePortalConfirmPassword();
 
-  const [modalMessageActionFinished, setModalMessageActionFinished] = useState({
-    isOpen: false,
-    message: undefined,
-  });
+  const { portalMessage, setOpenPortalMessage, setClosePortalMessage } =
+    usePortalMessage();
 
   const triggerFunction = () => {
-    setIsModalPasswordOpen(false);
-    handleUpdateEmail(newData, password, setModalMessageActionFinished);
-
-    setPassword('');
-    setNewData('');
+    setClosePortalConfirmPassword();
+    handleUpdateEmail(
+      newEmail,
+      portalConfirmPassword.password,
+      setOpenPortalMessage
+    );
+    setPasswordPortalConfirmPassword('');
+    setNewEmail('');
   };
 
   return (
@@ -31,30 +39,28 @@ const ChangeEmailForm = () => {
       <label>Change email:</label>
       <InputStyled
         type="email"
-        value={newData}
-        onChange={(e) => setNewData(e.target.value)}
+        value={newEmail}
+        onChange={(e) => setNewEmail(e.target.value)}
       />
       <ButtonStyled
         color="green"
         type="button"
-        onClick={() => setIsModalPasswordOpen(true)}
+        onClick={setOpenPortalConfirmPassword}
       >
         Change
       </ButtonStyled>
       <PortalConfirmPassword
-        label="Former Password:"
-        isModalOpen={isModalPasswordOpen}
-        closeModal={() => setIsModalPasswordOpen(false)}
-        password={password}
-        setPassword={setPassword}
+        label="Password:"
+        isModalOpen={portalConfirmPassword.isOpen}
+        closeModal={setClosePortalConfirmPassword}
+        password={portalConfirmPassword.password}
+        setPassword={setPasswordPortalConfirmPassword}
         triggerFunction={triggerFunction}
       />
       <PortalMessage
-        isModalOpen={modalMessageActionFinished.isOpen}
-        message={modalMessageActionFinished.message}
-        closeModal={() =>
-          setModalMessageActionFinished((prev) => ({ ...prev, isOpen: false }))
-        }
+        isModalOpen={portalMessage.isOpen}
+        message={portalMessage.message}
+        closeModal={setClosePortalMessage}
       />
     </Wrapper>
   );

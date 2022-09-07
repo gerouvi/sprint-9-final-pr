@@ -1,3 +1,4 @@
+import { stringError } from '../functions/stringError';
 import {
   addDocFunction,
   deletDocsFunction,

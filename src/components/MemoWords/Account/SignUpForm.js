@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ACCOUNT_OPTIONS } from '../../../lib/constants/accountOptions';
 import { handleCreateUserWithEmailAndPassword } from '../../../lib/firebase/firebase-handlers-auth';
-import handleAreCapsLock from '../../../lib/functions/areCapsLock';
+import useAreAreCapsLockEmailAndPassword from '../../../lib/hooks/useAreCapsLockEmailAndPassword';
 import { ButtonRoundedStyled } from '../../Buttons/ButtonRounded.styles';
 import { InputStyled } from '../../Form/Input.styles';
 import { ErrorMessage, Wrapper } from './SignInSignUpForm.styles';
@@ -13,10 +13,11 @@ const SignUpForm = ({ view }) => {
     error: undefined,
   });
 
-  const [capsLock, setCapsLock] = useState({
-    email: false,
-    password: false,
-  });
+  const {
+    areCapsLockEmailAndPassword,
+    setEmailAreCapsLockEmailAndPassword,
+    setPasswordAreCapsLockEmailAndPassword,
+  } = useAreAreCapsLockEmailAndPassword();
 
   if (view !== ACCOUNT_OPTIONS.SIGN_UP) return null;
 
@@ -40,7 +41,7 @@ const SignUpForm = ({ view }) => {
           <InputStyled
             value={credentialsUser.email}
             type="email"
-            onKeyUp={(e) => handleAreCapsLock(e, 'email', setCapsLock)}
+            onKeyUp={(e) => setEmailAreCapsLockEmailAndPassword(e)}
             onChange={(e) =>
               setCredentialsUser((prev) => ({
                 ...prev,
@@ -48,14 +49,14 @@ const SignUpForm = ({ view }) => {
               }))
             }
           />
-          {capsLock.email && <p>Caps Lock actived</p>}
+          {areCapsLockEmailAndPassword.email && <p>Caps Lock actived</p>}
         </div>
         <div>
           <label>Password:</label>
           <InputStyled
             value={credentialsUser.password}
             type="password"
-            onKeyUp={(e) => handleAreCapsLock(e, 'password', setCapsLock)}
+            onKeyUp={setPasswordAreCapsLockEmailAndPassword}
             onChange={(e) =>
               setCredentialsUser((prev) => ({
                 ...prev,
@@ -63,7 +64,7 @@ const SignUpForm = ({ view }) => {
               }))
             }
           />
-          {capsLock.password && <p>Caps Lock actived</p>}
+          {areCapsLockEmailAndPassword.password && <p>Caps Lock actived</p>}
         </div>
         <ButtonRoundedStyled
           disabled={!credentialsUser.email || !credentialsUser.password}

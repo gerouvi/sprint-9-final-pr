@@ -1,7 +1,10 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import { handleDeleteUser } from '../../../lib/firebase/firebase-handlers-auth';
 import { handleDeleteCollectionsAndSubcollection } from '../../../lib/firebase/firebase-handlers-firestore';
+import usePortalConfirmPassword from '../../../lib/hooks/usePortalConfirmPassword';
+import usePortalMessage from '../../../lib/hooks/usePortalMessage';
+import usePortalSpinner from '../../../lib/hooks/usePortalSpinner';
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import PortalPassword from '../Portals/PortalConfirmPassword';
 import PortalMessage from '../Portals/PortalMessage';
@@ -9,52 +12,53 @@ import PortalSpinner from '../Portals/PortalSpinner';
 
 const ButtonDeleteAccount = () => {
   const { user } = useContext(UserAuthContext);
-  const [password, setPassword] = useState('');
 
-  const [isModalPasswordOpen, setIsModalPasswordOpen] = useState(false);
+  const {
+    portalConfirmPassword,
+    setOpenPortalConfirmPassword,
+    setClosePortalConfirmPassword,
+    setPasswordPortalConfirmPassword,
+  } = usePortalConfirmPassword();
 
-  const [modalMessageActionFinished, setModalMessageActionFinished] = useState({
-    isOpen: false,
-    message: undefined,
-  });
+  const { portalMessage, setOpenPortalMessage, setClosePortalMessage } =
+    usePortalMessage();
 
-  const [isModalSpinnerOpen, setIsModalSpinnerOpen] = useState(false);
+  const { portalSpinner, setOpenPortalSpinner, setClosePortalSpinner } =
+    usePortalSpinner();
 
-  const send = () => {
-    setIsModalPasswordOpen(false);
-    setIsModalSpinnerOpen(true);
+  const triggerFunction = () => {
+    setClosePortalConfirmPassword();
+    setOpenPortalSpinner();
     handleDeleteCollectionsAndSubcollection();
-    handleDeleteUser(user.uid, password);
-    setPassword('');
-    setIsModalSpinnerOpen(false);
+    handleDeleteUser(
+      user.uid,
+      portalConfirmPassword.password,
+      setOpenPortalMessage
+    );
+    setPasswordPortalConfirmPassword('');
+    setClosePortalSpinner();
   };
 
   return (
     <>
-      <ButtonStyled
-        color="red"
-        onClick={() => {
-          setIsModalPasswordOpen(true);
-        }}
-      >
+      <ButtonStyled color="red" onClick={setOpenPortalConfirmPassword}>
         Delete account
       </ButtonStyled>
       <PortalPassword
         label="Password:"
-        isModalOpen={isModalPasswordOpen}
-        closeModal={() => setIsModalPasswordOpen(false)}
-        password={password}
-        setPassword={setPassword}
-        triggerFunction={send}
+        isModalOpen={portalConfirmPassword.isOpen}
+        closeModal={setClosePortalConfirmPassword}
+        password={portalConfirmPassword.password}
+        setPassword={setPasswordPortalConfirmPassword}
+        triggerFunction={triggerFunction}
       />
+
+      <PortalSpinner isModalOpen={portalSpinner} />
       <PortalMessage
-        isModalOpen={modalMessageActionFinished.isOpen}
-        message={modalMessageActionFinished.message}
-        closeModal={() =>
-          setModalMessageActionFinished((prev) => ({ ...prev, isOpen: false }))
-        }
+        isModalOpen={portalMessage.isOpen}
+        message={portalMessage.message}
+        closeModal={setClosePortalMessage}
       />
-      <PortalSpinner isModalOpen={isModalSpinnerOpen} />
     </>
   );
 };

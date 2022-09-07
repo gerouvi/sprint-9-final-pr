@@ -4,8 +4,9 @@ import { ButtonStyled } from '../../Buttons/Button.styles';
 import { InputStyled } from '../../Form/Input.styles';
 import { SelectStyled } from '../../Form/Select.styles';
 import { Wrapper } from './AddWords.styles';
-import WrapperPage from '../WrapperPage';
+
 import { handlePostWords } from '../../../lib/firebase/firebase-handlers-firestore';
+import WrapperPage from '../Wrappers/WrapperPage';
 
 const AddWords = () => {
   const {

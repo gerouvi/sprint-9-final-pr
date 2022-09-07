@@ -1,6 +1,6 @@
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import Portal from './Portal';
-import { Wrapper } from './PortalForgottenPassword.styles';
+import { Wrapper } from './PortalMessage.styles';
 
 const PortalMessage = ({ message, isModalOpen, closeModal }) => {
   return (

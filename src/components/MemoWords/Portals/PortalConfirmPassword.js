@@ -24,7 +24,9 @@ const PortalPassword = ({
             />
           </div>
           <div>
-            <ButtonStyled onClick={triggerFunction}>Send</ButtonStyled>
+            <ButtonStyled type="button" color="green" onClick={triggerFunction}>
+              Send
+            </ButtonStyled>
 
             <ButtonStyled
               color="red"
