@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ACCOUNT_OPTIONS } from '../../../lib/constants/accountOptions';
 import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import { ButtonStyled } from '../../Buttons/Button.styles';
@@ -9,6 +9,7 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 
 const Account = () => {
+  console.log('account');
   const [view, setView] = useState('signup');
 
   const { user } = useContext(UserAuthContext);

@@ -5,6 +5,7 @@ import WrapperPage from '../Wrappers/WrapperPage';
 import { TextDescription } from './LaunchPage.styles';
 
 const LaunchPage = () => {
+  console.log('launch page');
   return (
     <WrapperPage>
       {window.screen.availWidth > THEME_STYLES.MOBILE_SIZE && (

@@ -21,6 +21,7 @@ const GlobalStyles = createGlobalStyle`
     }
 
     body {
+        position: relative;
         margin: 0;
     }
 

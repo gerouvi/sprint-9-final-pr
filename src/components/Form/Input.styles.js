@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Input from './Input';
 
 export const InputStyled = styled(Input)`
-  width: 200px;
+  width: ${({ width }) => (width ? width : '200px')};
   text-align: center;
   outline: none;
   border: none;
@@ -11,8 +11,8 @@ export const InputStyled = styled(Input)`
   margin-top: 10px;
 
   &:focus {
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid blue;
     outline: none;
-    color: red;
+    color: blue;
   }
 `;

@@ -13,6 +13,8 @@ import AddWords from './components/MemoWords/AddWords/AddWords';
 import Games from './components/MemoWords/Games/Games';
 import LaunchPage from './components/MemoWords/LaunchPage/LaunchPage';
 import Translate from './components/MemoWords/Translate/Translate';
+import GameClassic from './components/MemoWords/Games/GameClassic/GameClassic';
+import GameSnake from './components/MemoWords/Games/GameSnake/GameSnake';
 
 function App() {
   const [showMobileDevice, setShowMobileDevice] = useState(true);
@@ -68,6 +70,22 @@ function App() {
               element={
                 <ProtectedRoutes>
                   <Games />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/classic"
+              element={
+                <ProtectedRoutes>
+                  <GameClassic />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/snake"
+              element={
+                <ProtectedRoutes>
+                  <GameSnake />
                 </ProtectedRoutes>
               }
             />

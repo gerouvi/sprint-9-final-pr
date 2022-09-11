@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import Spinner from './Spinner';
 
-export const Spinner = styled.div`
+export const SpinnerStyled = styled(Spinner)`
   width: 100px;
   height: 100px;
-  border: 10px solid blue;
+  border: 10px solid rgb(2, 182, 222);
   border-radius: 50%;
   border-left: 10px solid transparent;
 

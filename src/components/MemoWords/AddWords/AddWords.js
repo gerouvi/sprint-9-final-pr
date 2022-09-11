@@ -18,6 +18,7 @@ const AddWords = () => {
     setError,
     setInitialStateAddWords,
   } = useAddWords();
+  console.log('add words');
 
   return (
     <WrapperPage>

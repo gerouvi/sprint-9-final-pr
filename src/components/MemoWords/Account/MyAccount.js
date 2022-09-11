@@ -4,7 +4,7 @@ import { UserAuthContext } from '../../../lib/contexts/UserAuthContext';
 import ButtonDeleteAccount from './ButtonDeleteAccount';
 import ChangeEmailForm from './ChangeEmailForm';
 import ChangePasswordForm from './ChangePasswordForm';
-import { Wrapper } from './MyAccount.styles';
+import { Wrapper, WrapperForms } from './MyAccount.styles';
 
 const MyAccount = ({ view }) => {
   const { user } = useContext(UserAuthContext);
@@ -22,8 +22,10 @@ const MyAccount = ({ view }) => {
     <Wrapper>
       <h1>My Account</h1>
       <p>{user.email}</p>
-      <ChangeEmailForm />
-      <ChangePasswordForm />
+      <WrapperForms>
+        <ChangeEmailForm />
+        <ChangePasswordForm />
+      </WrapperForms>
       <ButtonDeleteAccount />
     </Wrapper>
   );

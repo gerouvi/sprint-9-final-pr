@@ -10,6 +10,8 @@ export const stringError = (code) => {
       return 'User not found';
     case 'auth/missing-email':
       return 'Missing email';
+    case 'doc.data() is undefined':
+      return 'No data';
     default:
       return 'Error';
   }

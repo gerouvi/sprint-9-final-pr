@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
 
   background-image: url(${(props) => props.bg});
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
   background-position: center;
 
   @media screen and (min-width: ${THEME_STYLES.MOBILE_SIZE}px) {

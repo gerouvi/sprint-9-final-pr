@@ -18,8 +18,14 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
+  orderBy,
+  query,
   serverTimestamp,
   setDoc,
+  startAfter,
+  updateDoc,
+  where,
 } from 'firebase/firestore';
 import { auth, db } from './firebase-config';
 
@@ -102,6 +108,32 @@ export const addDocFunction = (path, newData) => {
 };
 
 export const deletDocsFunction = (path) => {
+  const docRef = doc(db, 'users', path);
+  return deleteDoc(docRef);
+};
+
+export const getWordsListDocsLimit = (path, option1, last, lim) => {
+  const q = query(
+    collection(db, path),
+    orderBy(option1, 'asc'),
+    startAfter(last),
+    limit(lim)
+  );
+
+  return getDocs(q);
+};
+
+export const updateDocFunction = (path, newData) => {
+  const docRef = doc(db, 'users', path);
+  return updateDoc(docRef, newData);
+};
+
+export const getDocsSelectedForGame = (path) => {
+  const q = query(collection(db, path), where('selectedForGames', '==', true));
+  return getDocs(q);
+};
+
+export const deleteDocFunction = (path) => {
   const docRef = doc(db, 'users', path);
   return deleteDoc(docRef);
 };
