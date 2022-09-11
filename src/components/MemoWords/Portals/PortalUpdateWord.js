@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-import { handleGetListOfWords } from '../../../lib/firebase/firebase-handlers-firestore';
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import { InputStyled } from '../../Form/Input.styles';
 import Portal from './Portal';
@@ -12,6 +10,9 @@ const PortalUpdateWord = ({
   setWord1,
   setWord2,
   triggerFunction,
+  numberOfWords,
+  optionsSelect,
+  setListOfWords,
 }) => {
   return (
     <Portal isModalOpen={portalUpdateWords.isOpen}>
@@ -34,17 +35,21 @@ const PortalUpdateWord = ({
           Select for games
         </label>
         <div>
-          <Link to="/">
-            <ButtonStyled
-              color="green"
-              onClick={() => {
-                triggerFunction(portalUpdateWords);
-                setClosePortalUpdateWords();
-              }}
-            >
-              Modify
-            </ButtonStyled>
-          </Link>
+          <ButtonStyled
+            color="green"
+            onClick={() => {
+              triggerFunction(
+                portalUpdateWords,
+                optionsSelect.option1,
+                optionsSelect.option2,
+                numberOfWords,
+                setListOfWords
+              );
+              setClosePortalUpdateWords();
+            }}
+          >
+            Modify
+          </ButtonStyled>
           <ButtonStyled color="red" onClick={setClosePortalUpdateWords}>
             Cancel
           </ButtonStyled>

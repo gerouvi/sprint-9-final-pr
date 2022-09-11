@@ -11,7 +11,7 @@ import { Wrapper } from './WordsList.styles';
 import WordsListSelectMenu from './WordsListSelectMenu';
 
 const WordsList = () => {
-  // console.log('wordList');
+  console.log('wordList');
   const {
     optionsSelect,
     setAllOptionsSelect,
@@ -79,6 +79,7 @@ const WordsList = () => {
               // observerRef={observerRef}
               moreWordsFunction={moreWordsFunction}
               lastItem={lastItem.current}
+              setListOfWords={setListOfWords}
             />
           </>
         )}

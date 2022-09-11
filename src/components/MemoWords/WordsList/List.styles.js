@@ -12,7 +12,18 @@ export const WrapperWords = styled.div`
     margin: 0;
   }
 `;
-
+export const LetterTitle = styled.h4`
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: black;
+  margin-left: auto;
+  margin-right: auto;
+`;
 export const Word = styled.p`
   text-transform: capitalize;
 `;

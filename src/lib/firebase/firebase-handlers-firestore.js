@@ -1,4 +1,5 @@
 import { async } from '@firebase/util';
+import { doc } from 'firebase/firestore';
 import { stringError } from '../functions/stringError';
 import {
   addDocFunction,
@@ -9,6 +10,7 @@ import {
   getDocsSelectedForGame,
   getServerTimestamp,
   getUid,
+  getWordsListDocsLimiAfterUpdate,
   getWordsListDocsLimit,
   setDocFunction,
   updateDocFunction,
@@ -52,7 +54,7 @@ const getUpdatedLanguagesPairOfLanguages = (doc, option1, option2) => {
   });
 };
 
-const updateLanguagesResum = async (option1, option2, setError) => {
+const updateLanguagesResum = async (option1, option2) => {
   const uid = getUid();
   try {
     const doc = await getDocFunction(uid);
@@ -68,7 +70,6 @@ const updateLanguagesResum = async (option1, option2, setError) => {
     await setDocFunction(uid, { languagesResum, pairOfLanguagesResum });
   } catch (err) {
     console.log(err.message);
-    setError(err.message);
   }
 };
 
@@ -143,6 +144,7 @@ export const handleGetOptionsSelect = async (
   setAllOptionsSelect,
   setErrorOptionsSelect
 ) => {
+  console.log('handleGetOptionsSelect');
   const uid = getUid();
 
   try {
@@ -167,6 +169,7 @@ export const handleGetListOfWords = async (
   limit,
   setWords
 ) => {
+  console.log('handleGetListOfWords');
   const uid = getUid();
   //order options
   const optionsOrder = sortAndStringLanguages(option1, option2);
@@ -191,9 +194,41 @@ export const handleGetListOfWords = async (
   }
 };
 
+export const handleGetListOfWordsAfterUpdate = async (
+  option1,
+  option2,
+  accLimit,
+  setWords
+) => {
+  console.log('handleGetListOfWordsAfterUpdate');
+  const uid = getUid();
+  //order options
+  const optionsOrder = sortAndStringLanguages(option1, option2);
+
+  try {
+    const data = await getWordsListDocsLimiAfterUpdate(
+      `users/${uid}/${optionsOrder}`,
+      option1,
+      accLimit
+    );
+
+    const docs = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    setWords(docs);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 //WordsList, List, Update words
 
-export const handleUpdateWords = async (data) => {
+export const handleUpdateWords = async (
+  data,
+  option1,
+  option2,
+  numberOfWords,
+  setListOfWords
+) => {
+  console.log('handleUpdateWords');
   try {
     const uid = getUid();
 
@@ -211,6 +246,12 @@ export const handleUpdateWords = async (data) => {
     };
 
     await updateDocFunction(path, newData);
+    handleGetListOfWordsAfterUpdate(
+      option1,
+      option2,
+      numberOfWords,
+      setListOfWords
+    );
   } catch (err) {
     console.log(err);
   }
@@ -218,16 +259,42 @@ export const handleUpdateWords = async (data) => {
 
 //Delete doc
 
-export const handleDeleteWords = async (option1, option2, id) => {
-  console.log('here', id);
+const deleteLanguagesResum = async (option1, option2) => {
+  const uid = getUid();
+
+  try {
+    const newPairOfLanguages = sortAndStringLanguages(option1, option2);
+    const docs = await getDocsFunction(`users/${uid}/${newPairOfLanguages}`);
+    const arrayDocs = docs.docs.map((el) => ({ ...el.data() }));
+    if (!arrayDocs.length) {
+      const doc = await getDocFunction(uid);
+      const result = doc.data();
+      result.pairOfLanguagesResum = result.pairOfLanguagesResum.filter(
+        (el) => el !== newPairOfLanguages
+      );
+      await updateDocFunction(uid, result);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const handleDeleteWords = async (
+  option1,
+  option2,
+  id,
+  accLimit,
+  setWords
+) => {
+  console.log('handleDeleteWords');
   try {
     const uid = getUid();
     const pairOfLanguages = sortAndStringLanguages(option1, option2);
     const path = `${uid}/${pairOfLanguages}/${id}`;
 
-    console.log(path);
-
     await deleteDocFunction(path);
+    handleGetListOfWordsAfterUpdate(option1, option2, accLimit, setWords);
+    deleteLanguagesResum(option1, option2);
   } catch (err) {
     console.log(err);
   }
@@ -240,6 +307,7 @@ export const handleGetWordsFilteredGames = async (
   option2,
   wordsOptions
 ) => {
+  console.log('handleGetWordsFilteredGames');
   const uid = getUid();
   const newPairOfLanguages = sortAndStringLanguages(option1, option2);
   let data;

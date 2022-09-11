@@ -123,6 +123,17 @@ export const getWordsListDocsLimit = (path, option1, last, lim) => {
   return getDocs(q);
 };
 
+export const getWordsListDocsLimiAfterUpdate = (path, option1, accLimit) => {
+  const q = query(
+    collection(db, path),
+    orderBy(option1, 'asc'),
+
+    limit(accLimit)
+  );
+
+  return getDocs(q);
+};
+
 export const updateDocFunction = (path, newData) => {
   const docRef = doc(db, 'users', path);
   return updateDoc(docRef, newData);

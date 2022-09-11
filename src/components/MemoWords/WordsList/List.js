@@ -8,13 +8,20 @@ import { ButtonStyled } from '../../Buttons/Button.styles';
 import { SpinnerStyled } from '../../Extras/Spinner.styles';
 import PortalUpdateWord from '../Portals/PortalUpdateWord';
 import {
+  LetterTitle,
   NoSelectedText,
   SelectedText,
   Word,
   WrapperWords,
 } from './List.styles';
 
-const List = ({ listOfWords, optionsSelect, moreWordsFunction }) => {
+const List = ({
+  listOfWords,
+  setListOfWords,
+  optionsSelect,
+  moreWordsFunction,
+}) => {
+  console.log('list');
   const letterTitle = useRef();
   const letterFlag = useRef(true);
 
@@ -27,7 +34,14 @@ const List = ({ listOfWords, optionsSelect, moreWordsFunction }) => {
     setSelectedForGames,
   } = usePortalUpdateWord();
 
-  const updateFunction = (newData) => handleUpdateWords(newData);
+  const updateFunction = (
+    newData,
+    option1,
+    option2,
+    numberOfWords,
+    setListOfWords
+  ) =>
+    handleUpdateWords(newData, option1, option2, numberOfWords, setListOfWords);
 
   if (!listOfWords.length) return <h2>No Words</h2>;
 
@@ -47,7 +61,9 @@ const List = ({ listOfWords, optionsSelect, moreWordsFunction }) => {
         return (
           <div key={el.id}>
             {letterFlag.current && (
-              <h4>{el[optionsSelect.option1][0].toUpperCase()}</h4>
+              <LetterTitle>
+                {el[optionsSelect.option1][0].toUpperCase()}
+              </LetterTitle>
             )}
             <WrapperWords>
               <Word>{el[optionsSelect.option1]}</Word>
@@ -78,7 +94,9 @@ const List = ({ listOfWords, optionsSelect, moreWordsFunction }) => {
                   handleDeleteWords(
                     optionsSelect.option1,
                     optionsSelect.option2,
-                    el.id
+                    el.id,
+                    listOfWords.length,
+                    setListOfWords
                   );
                 }}
                 color="red"
@@ -110,6 +128,9 @@ const List = ({ listOfWords, optionsSelect, moreWordsFunction }) => {
         setWord1={setWord1}
         setWord2={setWord2}
         triggerFunction={updateFunction}
+        numberOfWords={listOfWords.length}
+        optionsSelect={optionsSelect}
+        setListOfWords={setListOfWords}
       />
     </>
   );
