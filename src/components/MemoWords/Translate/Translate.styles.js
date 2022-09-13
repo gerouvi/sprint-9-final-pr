@@ -14,4 +14,13 @@ export const Wrapper = styled.div`
       padding-top: 0px;
     }
   }
+
+  & form {
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+  }
 `;

@@ -1,5 +1,3 @@
-import { async } from '@firebase/util';
-import { doc } from 'firebase/firestore';
 import { stringError } from '../functions/stringError';
 import {
   addDocFunction,

@@ -1,4 +1,3 @@
-import { languagesOptions } from '../../../lib/constants/langaugesOptions';
 import { useAddWords } from '../../../lib/hooks/useAddWords';
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import { InputStyled } from '../../Form/Input.styles';
@@ -7,6 +6,7 @@ import { Wrapper } from './AddWords.styles';
 
 import { handlePostWords } from '../../../lib/firebase/firebase-handlers-firestore';
 import WrapperPage from '../Wrappers/WrapperPage';
+import { LANGUAGES_OPTIONS } from '../../../lib/constants/langaugesOptions';
 
 const AddWords = () => {
   const {
@@ -19,6 +19,8 @@ const AddWords = () => {
     setInitialStateAddWords,
   } = useAddWords();
   console.log('add words');
+
+  console.log(addWords);
 
   return (
     <WrapperPage>
@@ -42,7 +44,7 @@ const AddWords = () => {
               value={addWords.option1}
               onChange={(e) => setOption1(e.target.value)}
             >
-              {languagesOptions.map((language) => (
+              {LANGUAGES_OPTIONS.map((language) => (
                 <option key={language.name} value={language.name}>
                   {language.name.toUpperCase()}
                 </option>
@@ -59,7 +61,7 @@ const AddWords = () => {
               value={addWords.option2}
               onChange={(e) => setOption2(e.target.value)}
             >
-              {languagesOptions.map((language) => (
+              {LANGUAGES_OPTIONS.map((language) => (
                 <option key={language.name} value={language.name}>
                   {language.name.toUpperCase()}
                 </option>

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 const getInitialStateAddWords = () => ({
-  option1: localStorage.getItem('option1') || 'english',
+  option1: localStorage.getItem('addWordsOpt1') || 'english',
   word1: '',
-  option2: localStorage.getItem('option2') || 'english',
+  option2: localStorage.getItem('addWordsOpt2') || 'spanish',
   word2: '',
   error: undefined,
   correct: undefined,
@@ -17,7 +17,7 @@ export const useAddWords = () => {
       ...prev,
       option1: newOption,
     }));
-    localStorage.setItem('option1', newOption);
+    localStorage.setItem('addWordsOpt1', newOption);
   };
   const setWord1 = (newOption) => {
     setAddWords((prev) => ({
@@ -30,7 +30,7 @@ export const useAddWords = () => {
       ...prev,
       option2: newOption,
     }));
-    localStorage.setItem('option2', newOption);
+    localStorage.setItem('addWordsOpt2', newOption);
   };
   const setWord2 = (newOption) => {
     setAddWords((prev) => ({

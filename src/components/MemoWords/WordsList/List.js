@@ -73,9 +73,9 @@ const List = ({
               <Word>{el[optionsSelect.option2]}</Word>
 
               {el.selectedForGames ? (
-                <SelectedText>Selected for the games</SelectedText>
+                <SelectedText>Selected</SelectedText>
               ) : (
-                <NoSelectedText>Not selected for the games</NoSelectedText>
+                <NoSelectedText>Not selected</NoSelectedText>
               )}
               <ButtonStyled
                 onClick={() => {
