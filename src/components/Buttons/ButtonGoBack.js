@@ -1,14 +1,5 @@
-import ArrowLeftIcon from '../Icons/ArrowLeftIcon';
-import { ButtonIconStyled } from './ButtonIcon.styles';
-
-const ButtonGoBack = ({ className, ...props }) => {
-  return (
-    <div className={className}>
-      <ButtonIconStyled>
-        <ArrowLeftIcon />
-      </ButtonIconStyled>
-    </div>
-  );
+const ButtonGoBack = ({ className, children, ...props }) => {
+  return <div className={className}>{children}</div>;
 };
 
 export default ButtonGoBack;

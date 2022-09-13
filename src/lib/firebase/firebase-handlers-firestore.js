@@ -25,61 +25,20 @@ const sortAndStringLanguages = (language1, language2) => {
   return sortLanguages[0] + '-' + sortLanguages[1];
 };
 
-const getUpdatedLanguagesResum = (doc, option1, option2) => {
-  let languagesResum = [];
-
-  if (doc.data()) languagesResum = doc.data().languagesResum;
-
-  languagesResum.push(option1);
-  languagesResum.push(option2);
-
-  return languagesResum
-    .filter((language, index) => {
-      return languagesResum.indexOf(language) === index;
-    })
-    .sort();
-};
-
-const getUpdatedLanguagesPairOfLanguages = (doc, option1, option2) => {
-  let pairOfLanguagesResum = [];
-
-  const newPairOfLanguages = sortAndStringLanguages(option1, option2);
-
-  if (doc.data()) pairOfLanguagesResum = doc.data().pairOfLanguagesResum;
-
-  pairOfLanguagesResum.push(newPairOfLanguages);
-
-  return pairOfLanguagesResum.filter((language, index) => {
-    return pairOfLanguagesResum.indexOf(language) === index;
-  });
-};
-
 const updateLanguagesResum = async (option1, option2) => {
   const uid = getUid();
   try {
     const doc = await getDocFunction(uid);
 
-    const languagesResum = getUpdatedLanguagesResum(doc, option1, option2);
+    const languagesResum = postUpdatedLanguagesResum(doc, option1, option2);
 
-    const pairOfLanguagesResum = getUpdatedLanguagesPairOfLanguages(
-      doc,
-      option1,
-      option2
-    );
-
-    await setDocFunction(uid, { languagesResum, pairOfLanguagesResum });
+    await setDocFunction(uid, { languagesResum });
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export const handlePostWords = async (
-  word1,
-  option1,
-  word2,
-  option2,
-  setError
-) => {
+export const handlePostWords = async (word1, option1, word2, option2) => {
   const languagesCollectionName = sortAndStringLanguages(option1, option2);
   const uid = getUid();
   const path = `users/${uid}/${languagesCollectionName}`;
@@ -92,10 +51,8 @@ export const handlePostWords = async (
       createdAt: serverTimestamp,
       selectedForGames: false,
     });
-    updateLanguagesResum(option1, option2, setError);
-  } catch (err) {
-    setError(err.message);
-  }
+    updateLanguagesResum(option1, option2);
+  } catch (err) {}
 };
 
 //Delete all collections and subcollections of some uid
@@ -103,8 +60,8 @@ export const handleDeleteCollectionsAndSubcollection = async () => {
   const uid = getUid();
   try {
     const docUserResums = await getDocFunction(uid);
-    const pairOfLanguagesResum = docUserResums.data().pairOfLanguagesResum;
-    pairOfLanguagesResum.forEach((pairOfLanguages) => {
+    const languagesResum = docUserResums.data().languagesResum;
+    languagesResum.forEach((pairOfLanguages) => {
       getDocsPairOfLanguages(uid, pairOfLanguages);
     });
     deleteDoc(uid);
@@ -139,7 +96,7 @@ const deleteDoc = async (path) => {
   }
 };
 
-//Options select
+//Get options select
 export const handleGetOptionsSelect = async (
   setAllOptionsSelect,
   setErrorOptionsSelect
@@ -149,15 +106,74 @@ export const handleGetOptionsSelect = async (
 
   try {
     const doc = await getDocFunction(uid);
+
+    const options = [];
+
+    doc.data().languagesResum.forEach((el) => {
+      const split = el.split('-');
+      options.push(split[0]);
+      options.push(split[1]);
+    });
+
+    const optionsFiltered = options.filter((el, index) => {
+      return options.indexOf(el) === index;
+    });
+
+    optionsFiltered.sort();
+
+    const option1LocalStorage = localStorage.getItem('option1');
+    const option2LocalStorage = localStorage.getItem('option2');
+
+    if (option1LocalStorage && !optionsFiltered.includes(option1LocalStorage))
+      localStorage.removeItem('option1');
+    if (option2LocalStorage && !optionsFiltered.includes(option2LocalStorage))
+      localStorage.removeItem('option2');
+
     setAllOptionsSelect(
-      doc.data().languagesResum,
-      doc.data().languagesResum[0],
-      doc.data().languagesResum[1]
+      optionsFiltered,
+      optionsFiltered[0],
+      optionsFiltered[1]
     );
   } catch (err) {
     console.log(err.message);
     const strError = stringError(err.message);
     setErrorOptionsSelect(strError);
+  }
+};
+
+//Post options select
+const postUpdatedLanguagesResum = (doc, option1, option2) => {
+  let languagesResum = [];
+
+  const newPairOfLanguages = sortAndStringLanguages(option1, option2);
+
+  if (doc.data()) languagesResum = doc.data().languagesResum;
+
+  languagesResum.push(newPairOfLanguages);
+
+  return languagesResum.filter((language, index) => {
+    return languagesResum.indexOf(language) === index;
+  });
+};
+
+//Delete options select
+const deleteLanguagesResum = async (option1, option2) => {
+  const uid = getUid();
+
+  try {
+    const newPairOfLanguages = sortAndStringLanguages(option1, option2);
+    const docs = await getDocsFunction(`users/${uid}/${newPairOfLanguages}`);
+    const arrayDocs = docs.docs.map((el) => ({ ...el.data() }));
+    if (!arrayDocs.length) {
+      const doc = await getDocFunction(uid);
+      const result = doc.data();
+      result.languagesResum = result.languagesResum.filter(
+        (el) => el !== newPairOfLanguages
+      );
+      await updateDocFunction(uid, result);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -219,8 +235,8 @@ export const handleGetListOfWordsAfterUpdate = async (
     console.log(err.message);
   }
 };
-//WordsList, List, Update words
 
+//WordsList, List, Update words
 export const handleUpdateWords = async (
   data,
   option1,
@@ -258,27 +274,6 @@ export const handleUpdateWords = async (
 };
 
 //Delete doc
-
-const deleteLanguagesResum = async (option1, option2) => {
-  const uid = getUid();
-
-  try {
-    const newPairOfLanguages = sortAndStringLanguages(option1, option2);
-    const docs = await getDocsFunction(`users/${uid}/${newPairOfLanguages}`);
-    const arrayDocs = docs.docs.map((el) => ({ ...el.data() }));
-    if (!arrayDocs.length) {
-      const doc = await getDocFunction(uid);
-      const result = doc.data();
-      result.pairOfLanguagesResum = result.pairOfLanguagesResum.filter(
-        (el) => el !== newPairOfLanguages
-      );
-      await updateDocFunction(uid, result);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 export const handleDeleteWords = async (
   option1,
   option2,

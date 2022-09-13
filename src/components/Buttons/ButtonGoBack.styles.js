@@ -5,4 +5,6 @@ export const ButtonGoBackStyled = styled(ButtonGoBack)`
   position: absolute;
   top: 10px;
   left: 10px;
+  color: black;
+  text-decoration: underline;
 `;

@@ -1,5 +1,6 @@
+import { Link } from 'react-router-dom';
 import { THEME_STYLES } from '../../../styles/THEME_STYLES';
-import { ButtonNeonStyled } from '../../Buttons/ButtonNeon.styles';
+import { ButtonStyled } from '../../Buttons/Button.styles';
 import WrapperPage from '../Wrappers/WrapperPage';
 
 import { TextDescription } from './LaunchPage.styles';
@@ -24,7 +25,9 @@ const LaunchPage = () => {
           <p>
             Go to account to Log In or Sign In if you don't have an account!
           </p>
-          <ButtonNeonStyled>Log In / Sign In</ButtonNeonStyled>
+          <Link to="/account">
+            <ButtonStyled color="green">Log In / Sign In</ButtonStyled>
+          </Link>
         </TextDescription>
       )}
     </WrapperPage>

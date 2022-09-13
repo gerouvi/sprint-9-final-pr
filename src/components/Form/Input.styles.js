@@ -9,7 +9,6 @@ export const InputStyled = styled(Input)`
   border-bottom: 1px solid black;
   background-color: transparent;
   margin-top: 10px;
-  text-transform: capitalize;
 
   &:focus {
     border-bottom: 1px solid blue;

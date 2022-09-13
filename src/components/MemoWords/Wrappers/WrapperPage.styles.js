@@ -8,11 +8,12 @@ export const Wrapper = styled.div`
 
   background-image: url(${(props) => props.bg});
   background-size: cover;
-  background-repeat: repeat-y;
+  background-repeat: no-repeat;
   background-position: center;
+  background-attachment: fixed;
 
   @media screen and (min-width: ${THEME_STYLES.MOBILE_SIZE}px) {
-    background-position-y: -300px;
+    background-position-y: -700px;
   }
 
   @media screen and (min-width: ${THEME_STYLES.TABLET_SIZE}px) {

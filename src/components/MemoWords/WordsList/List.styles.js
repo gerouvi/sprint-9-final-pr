@@ -13,9 +13,9 @@ export const WrapperWords = styled.div`
   }
 `;
 export const LetterTitle = styled.h4`
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  border-radius: 10px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;

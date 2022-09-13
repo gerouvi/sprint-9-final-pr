@@ -1,32 +1,41 @@
 const getPairOfWordsGames = (initialWords) => {
-  //   const indexRandom = Math.floor(Math.random() * initialWords.length);
-  //   const words = initialWords[indexRandom];
-  //   const wordsCopied = JSON.parse(JSON.stringify(words));
-
-  //   delete wordsCopied.id;
-  //   delete wordsCopied.selectedForGames;
-  //   delete wordsCopied.createdAt;
-
-  //   const wordsValues = Object.values(wordsCopied);
-  //   const binaryRandom = Math.floor(Math.random() * 2);
-  //   const question = wordsValues[binaryRandom];
-  //   const answer = wordsValues[binaryRandom ? 0 : 1];
-
   const indexRandom = Math.floor(Math.random() * initialWords.length);
-  const wordsSelected = initialWords[indexRandom];
+  let indexRandom2;
 
-  delete wordsSelected.id;
-  delete wordsSelected.selectedForGames;
-  delete wordsSelected.createdAt;
+  do {
+    indexRandom2 = Math.floor(Math.random() * initialWords.length);
+  } while (indexRandom === indexRandom2);
 
-  const wordsValues = Object.values(wordsSelected);
-  const binaryRandom = Math.floor(Math.random() * 2);
-  const question = wordsValues[binaryRandom];
-  const answer = wordsValues[binaryRandom ? 0 : 1];
+  const words = initialWords[indexRandom];
+  const wordsFake = initialWords[indexRandom2];
+
+  delete words.id;
+  delete words.selectedForGames;
+  delete words.createdAt;
+  delete wordsFake.id;
+  delete wordsFake.selectedForGames;
+  delete wordsFake.createdAt;
+
+  const languages = Object.keys(words);
+
+  const indexAnswer = Math.floor(Math.random() * 2);
+  const indexQuestion = indexAnswer ? 0 : 1;
+
+  const languageAnswer = languages[indexAnswer];
+  const languageQuestion = languages[indexQuestion];
+
+  const randomColorAnswerCorrect = Math.floor(Math.random() * 2);
+
+  const correctColorAnswer = randomColorAnswerCorrect ? 'blue' : 'green';
+
+  const wrongColorAnswer = randomColorAnswerCorrect ? 'green' : 'blue';
 
   return {
-    question,
-    answer,
+    answer: words[languageAnswer],
+    answerFake: wordsFake[languageAnswer],
+    question: words[languageQuestion],
+    correctColorAnswer,
+    wrongColorAnswer,
   };
 };
 

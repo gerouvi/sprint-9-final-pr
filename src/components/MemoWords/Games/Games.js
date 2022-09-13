@@ -74,7 +74,7 @@ const Games = () => {
                 gamesOptions={gamesOptions}
                 setGamesOptions={setGamesOptions}
               />
-              {words.length ? (
+              {words.length > 2 ? (
                 <ButtonStyled
                   onClick={() =>
                     setGamesOptions((prev) => ({ ...prev, play: true }))
@@ -84,7 +84,7 @@ const Games = () => {
                   Play!
                 </ButtonStyled>
               ) : (
-                'No words'
+                'No words to play'
               )}
             </>
           )}

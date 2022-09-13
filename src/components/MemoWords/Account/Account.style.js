@@ -10,11 +10,13 @@ export const WrapperButtons = styled.ul`
 
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
 
   gap: 20px;
 
   @media screen and (min-width: ${THEME_STYLES.MOBILE_SIZE}px) {
+    flex-direction: row;
     font-size: 1em;
     padding-top: 0;
   }

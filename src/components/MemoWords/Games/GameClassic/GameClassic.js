@@ -8,25 +8,21 @@ import { Form, Question, Result, Subtitle } from './GameClassic.styles';
 const GameClassic = ({ words, setGamesOptions }) => {
   console.log('game classic');
   const { question, answer } = getPairOfWordsGames(words);
-
   const [quizGame, setQuizGame] = useState({
     question: question,
     answer: answer,
     userAnswer: '',
     result: undefined,
   });
-
   return (
     <>
       <Subtitle>Classic</Subtitle>
-
       <ButtonStyled
         onClick={() => setGamesOptions((prev) => ({ ...prev, play: false }))}
         color="red"
       >
         Stop
       </ButtonStyled>
-
       <Form
         onSubmit={(e) => {
           e.preventDefault();
@@ -36,7 +32,6 @@ const GameClassic = ({ words, setGamesOptions }) => {
         }}
       >
         <Question>{quizGame.question}</Question>
-
         <InputStyled
           value={quizGame.userAnswer}
           onChange={(e) =>
@@ -50,7 +45,6 @@ const GameClassic = ({ words, setGamesOptions }) => {
           {quizGame.result === true && 'Correct'}
           {quizGame.result === false && `Incorrect, ${quizGame.answer}`}
         </Result>
-
         {quizGame.result === undefined ? (
           <ButtonStyled color="green">Check</ButtonStyled>
         ) : (

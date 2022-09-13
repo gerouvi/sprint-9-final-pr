@@ -8,7 +8,7 @@ export const ButtonStyled = styled(Button)`
   border: 1px solid ${({ color }) => (color ? color : 'black')};
   color: ${({ color }) => (color ? color : 'black')};
   cursor: pointer;
-  background-color: transparent;
+  background-color: ${({ bg }) => (bg ? bg : 'transparent')};
 
   &:disabled {
     border: 1px solid gray;

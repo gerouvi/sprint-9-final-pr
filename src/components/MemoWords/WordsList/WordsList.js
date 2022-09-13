@@ -50,10 +50,10 @@ const WordsList = () => {
   ]);
 
   const moreWordsFunction = useCallback(() => {
-    setMoreWords((prev) => !prev);
+    setTimeout(() => {
+      setMoreWords((prev) => !prev);
+    }, 200);
   }, []);
-
-  // const observerRef = useObserver(moreWordsFunction);
 
   return (
     <WrapperPage>
@@ -73,14 +73,15 @@ const WordsList = () => {
               setOption2Select={setOption2Select}
               lastItem={lastItem}
             />
-            <List
-              listOfWords={listOfWords}
-              optionsSelect={optionsSelect}
-              // observerRef={observerRef}
-              moreWordsFunction={moreWordsFunction}
-              lastItem={lastItem.current}
-              setListOfWords={setListOfWords}
-            />
+            {listOfWords.length && (
+              <List
+                listOfWords={listOfWords}
+                optionsSelect={optionsSelect}
+                moreWordsFunction={moreWordsFunction}
+                lastItem={lastItem.current}
+                setListOfWords={setListOfWords}
+              />
+            )}
           </>
         )}
       </Wrapper>

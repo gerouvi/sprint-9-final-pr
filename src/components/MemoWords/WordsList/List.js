@@ -3,6 +3,7 @@ import {
   handleDeleteWords,
   handleUpdateWords,
 } from '../../../lib/firebase/firebase-handlers-firestore';
+import useObserver from '../../../lib/hooks/useObserver';
 import usePortalUpdateWord from '../../../lib/hooks/usePortalUpdateWord';
 import { ButtonStyled } from '../../Buttons/Button.styles';
 import { SpinnerStyled } from '../../Extras/Spinner.styles';
@@ -19,9 +20,11 @@ const List = ({
   listOfWords,
   setListOfWords,
   optionsSelect,
+  lastItem,
   moreWordsFunction,
 }) => {
   console.log('list');
+
   const letterTitle = useRef();
   const letterFlag = useRef(true);
 
@@ -43,7 +46,7 @@ const List = ({
   ) =>
     handleUpdateWords(newData, option1, option2, numberOfWords, setListOfWords);
 
-  if (!listOfWords.length) return <h2>No Words</h2>;
+  const ref = useObserver(moreWordsFunction);
 
   return (
     <>
@@ -107,20 +110,14 @@ const List = ({
           </div>
         );
       })}
-      {/* {lastItem && (
-        <>
-          {' '}
 
+      {lastItem !== undefined && (
+        <>
+          <div ref={ref} style={{ height: 1 }}></div>
+          <SpinnerStyled />
         </>
-      )} */}
-      <div
-        onClick={() => {
-          moreWordsFunction();
-        }}
-      >
-        Observer
-      </div>
-      <SpinnerStyled />
+      )}
+
       <PortalUpdateWord
         portalUpdateWords={portalUpdateWords}
         setClosePortalUpdateWords={setClosePortalUpdateWords}

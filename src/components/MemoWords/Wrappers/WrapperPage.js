@@ -10,12 +10,12 @@ const WrapperPage = ({ children }) => {
 
   return (
     <Wrapper bg={bg}>
-      {window.screen.availWidth <= THEME_STYLES.MOBILE_SIZE && pathName && (
+      {window.screen.width <= THEME_STYLES.MOBILE_SIZE && pathName && (
         <Link to="/">
-          <ButtonGoBackStyled />
+          <ButtonGoBackStyled>Go Back</ButtonGoBackStyled>
         </Link>
       )}
-      {(window.screen.availWidth > THEME_STYLES.MOBILE_SIZE || !pathName) && (
+      {(window.screen.width > THEME_STYLES.MOBILE_SIZE || !pathName) && (
         <MenuNav />
       )}
       {children}

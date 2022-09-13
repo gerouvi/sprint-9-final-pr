@@ -24,6 +24,7 @@ const PortalForgottenPassword = ({
               color="green"
               onClick={() => {
                 triggerFunction();
+                closeModal();
               }}
             >
               Send
@@ -31,10 +32,7 @@ const PortalForgottenPassword = ({
             <ButtonStyled
               color="red"
               type="button"
-              onClick={() => {
-                closeModal();
-                setEmailToSendForgottenPassword('');
-              }}
+              onClick={() => closeModal()}
             >
               Cancel
             </ButtonStyled>
