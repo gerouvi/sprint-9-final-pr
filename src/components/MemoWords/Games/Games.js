@@ -51,7 +51,7 @@ const Games = () => {
   return (
     <WrapperPage>
       <Wrapper>
-        <h1>Games</h1>
+        {!gamesOptions.play && <h1>Games</h1>}
         {!optionsSelect.allOptions.length &&
           !optionsSelect.error &&
           !gamesOptions.play && <SpinnerStyled />}
