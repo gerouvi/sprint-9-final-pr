@@ -6,16 +6,16 @@ import {
   ArrowRight,
   ArrowUp,
   FieldBorders,
+  Fruit,
+  GameOver,
   Result,
   Wrapper,
   WrapperArrows,
 } from './FieldAndGameLogic.styles';
-import Fruit from './Fruit';
 import Snake from './Snake';
 
 const getInitialState = () => ({
   key: 'ArrowRight',
-  lastKey: undefined,
   value: null,
   counter: 0,
   snakeCoords: [
@@ -28,85 +28,137 @@ const getInitialState = () => ({
     [30, 0],
   ],
   fruitCoords: [20, 20],
+  fruitFakeCoords: [40, 40],
   accerts: 0,
+  finishGame: false,
 });
 
-const FieldAndGameLogic = ({ isMobile }) => {
+const FieldAndGameLogic = ({ isMobile, gameOptions, setNewWords }) => {
   const states = useRef(getInitialState());
   const frame = useRef(0);
   const [refresh, setRefresh] = useState(0);
   const [start, setStart] = useState(false);
 
+  const { correctColorAnswer, wrongColorAnswer } = gameOptions;
+
   const gameLoop = () => {
     coordinatesFunction(frame, states);
     const isOutside = isSnakeOutside(states);
     const hasEatenTail = isSnakeEatingItsTail(states);
+    const hasEatenFakeFruit = hasTheSnakeEatedTheFruit(
+      states,
+      states.current.fruitFakeCoords
+    );
 
     const idAnimationFrame = window.requestAnimationFrame(gameLoop);
 
-    if (isOutside || hasEatenTail) {
+    if (isOutside || hasEatenTail || hasEatenFakeFruit) {
+      states.current.finishGame = true;
       cancelAnimationFrame(idAnimationFrame);
     } else {
       setRefresh((prev) => prev + 1);
     }
 
-    const hasEatedFruit = hasTheSnakeEatedTheFruit(states);
+    const hasEatedFruit = hasTheSnakeEatedTheFruit(
+      states,
+      states.current.fruitCoords
+    );
 
     if (hasEatedFruit) {
       states.current.accerts += 1;
-      generateFruitRandom(states);
+      generateRandomFruits(states);
       increaseSnakeDots(states);
+      setNewWords((prev) => !prev);
+    }
+  };
+
+  const functionAddEventListener = (e) => {
+    if (
+      (e.key === 'ArrowLeft' && states.current.key !== 'ArrowRight') ||
+      (e.key === 'ArrowRight' && states.current.key !== 'ArrowLeft') ||
+      (e.key === 'ArrowUp' && states.current.key !== 'ArrowDown') ||
+      (e.key === 'ArrowDown' && states.current.key !== 'ArrowUp')
+    ) {
+      states.current.key = e.key;
     }
   };
   useEffect(() => {
     if (start) {
-      window.addEventListener('keydown', (e) => {
-        if (
-          (e.key === 'ArrowLeft' && states.current.key !== 'ArrowRight') ||
-          (e.key === 'ArrowRight' && states.current.key !== 'ArrowLeft') ||
-          (e.key === 'ArrowUp' && states.current.key !== 'ArrowDown') ||
-          (e.key === 'ArrowDown' && states.current.key !== 'ArrowUp')
-        ) {
-          states.current.lastKey = states.current.key;
-          states.current.key = e.key;
-        }
-      });
+      window.addEventListener('keydown', functionAddEventListener);
+
       const btnUp = document.getElementById('btnUp');
       const btnDown = document.getElementById('btnDown');
       const btnLeft = document.getElementById('btnLeft');
       const btnRight = document.getElementById('btnRight');
+
       btnUp.addEventListener('click', () => {
-        states.current.lastKey = states.current.key;
-        states.current.key = 'ArrowUp';
+        if (
+          states.current.key !== 'ArrowDown' ||
+          states.current.key !== 'ArrowUp'
+        )
+          states.current.key = 'ArrowUp';
       });
       btnDown.addEventListener('click', () => {
-        states.current.lastKey = states.current.key;
-        states.current.key = 'ArrowDown';
+        if (
+          states.current.key !== 'ArrowUp' ||
+          states.current.key !== 'ArrowDown'
+        )
+          states.current.key = 'ArrowDown';
       });
       btnLeft.addEventListener('click', () => {
-        states.current.lastKey = states.current.key;
-        states.current.key = 'ArrowLeft';
+        if (
+          states.current.key !== 'ArrowLeft' ||
+          states.current.key !== 'ArrowRight'
+        )
+          states.current.key = 'ArrowLeft';
       });
       btnRight.addEventListener('click', () => {
-        states.current.lastKey = states.current.key;
-        states.current.key = 'ArrowRight';
+        if (
+          states.current.key !== 'ArrowLeft' ||
+          states.current.key !== 'ArrowRight'
+        )
+          states.current.key = 'ArrowRight';
       });
       window.requestAnimationFrame(gameLoop);
     }
+
+    return () =>
+      window.removeEventListener('keydown', functionAddEventListener);
   }, [start]);
   return (
     <>
       <Wrapper>
-        {!start && (
+        {!start ? (
           <ButtonStyled color="green" onClick={() => setStart(true)}>
             Start
           </ButtonStyled>
+        ) : (
+          <ButtonStyled
+            color="green"
+            onClick={() => {
+              if (states.current.finishGame) {
+                states.current = getInitialState();
+                setNewWords();
+                setStart(false);
+              }
+            }}
+          >
+            New Game
+          </ButtonStyled>
         )}
+
         <Result>{states.current.accerts}</Result>
 
         <FieldBorders>
           <Snake snakeCoords={states.current.snakeCoords} />
-          <Fruit fruitCoords={states.current.fruitCoords} />
+          <Fruit
+            fruitCoords={states.current.fruitCoords}
+            color={correctColorAnswer}
+          />
+          <Fruit
+            fruitCoords={states.current.fruitFakeCoords}
+            color={wrongColorAnswer}
+          />
         </FieldBorders>
 
         <WrapperArrows isMobile={isMobile}>
@@ -127,52 +179,52 @@ const coordinatesFunction = (frame, states) => {
 
     //In case you press
     const condition = states.current.key;
+    if (!states.current.finishGame)
+      switch (condition) {
+        case 'ArrowUp': {
+          states.current.lastKey = undefined;
+          newCoords.push([
+            newCoords[newCoords.length - 1][0],
+            newCoords[newCoords.length - 1][1] - 5,
+          ]);
+          newCoords.shift();
 
-    switch (condition) {
-      case 'ArrowUp': {
-        states.current.lastKey = undefined;
-        newCoords.push([
-          newCoords[newCoords.length - 1][0],
-          newCoords[newCoords.length - 1][1] - 5,
-        ]);
-        newCoords.shift();
+          break;
+        }
+        case 'ArrowDown': {
+          states.current.lastKey = undefined;
+          newCoords.push([
+            newCoords[newCoords.length - 1][0],
+            newCoords[newCoords.length - 1][1] + 5,
+          ]);
+          newCoords.shift();
 
-        break;
-      }
-      case 'ArrowDown': {
-        states.current.lastKey = undefined;
-        newCoords.push([
-          newCoords[newCoords.length - 1][0],
-          newCoords[newCoords.length - 1][1] + 5,
-        ]);
-        newCoords.shift();
+          break;
+        }
+        case 'ArrowLeft': {
+          states.current.lastKey = undefined;
+          newCoords.push([
+            newCoords[newCoords.length - 1][0] - 5,
+            newCoords[newCoords.length - 1][1],
+          ]);
+          newCoords.shift();
 
-        break;
-      }
-      case 'ArrowLeft': {
-        states.current.lastKey = undefined;
-        newCoords.push([
-          newCoords[newCoords.length - 1][0] - 5,
-          newCoords[newCoords.length - 1][1],
-        ]);
-        newCoords.shift();
+          break;
+        }
+        case 'ArrowRight': {
+          states.current.lastKey = undefined;
+          newCoords.push([
+            newCoords[newCoords.length - 1][0] + 5,
+            newCoords[newCoords.length - 1][1],
+          ]);
+          newCoords.shift();
 
-        break;
+          break;
+        }
+        default: {
+          break;
+        }
       }
-      case 'ArrowRight': {
-        states.current.lastKey = undefined;
-        newCoords.push([
-          newCoords[newCoords.length - 1][0] + 5,
-          newCoords[newCoords.length - 1][1],
-        ]);
-        newCoords.shift();
-
-        break;
-      }
-      default: {
-        break;
-      }
-    }
     states.current.snakeCoords = newCoords;
   } else {
     frame.current += 1;
@@ -205,31 +257,38 @@ const isSnakeEatingItsTail = (states) => {
   return false;
 };
 
-const hasTheSnakeEatedTheFruit = (states) => {
+const hasTheSnakeEatedTheFruit = (states, coords) => {
   const head =
     states.current.snakeCoords[states.current.snakeCoords.length - 1];
 
-  const hasEated =
-    head[0] === states.current.fruitCoords[0] &&
-    head[1] === states.current.fruitCoords[1];
+  const hasEated = head[0] === coords[0] && head[1] === coords[1];
 
   return hasEated;
 };
 
-const generateFruitRandom = (states) => {
-  let condition = true;
-  let posX;
-  let posY;
+const generateRandomFruits = (states) => {
+  let conditionFr1 = true;
+  let conditionFr2 = true;
+  let posX1;
+  let posY1;
+  let posX2;
+  let posY2;
   do {
-    posX = Math.floor(Math.random() * 20) * 5;
-    posY = Math.floor(Math.random() * 20) * 5;
+    posX1 = Math.floor(Math.random() * 20) * 5;
+    posY1 = Math.floor(Math.random() * 20) * 5;
+    posX2 = Math.floor(Math.random() * 20) * 5;
+    posY2 = Math.floor(Math.random() * 20) * 5;
 
-    condition = states.current.snakeCoords.some(
-      (coord) => coord[0] === posX && coord[1] === posY
+    conditionFr1 = states.current.snakeCoords.some(
+      (coord) => coord[0] === posX1 && coord[1] === posY1
     );
-  } while (condition);
+    conditionFr2 = states.current.snakeCoords.some(
+      (coord) => coord[0] === posX2 && coord[1] === posY2
+    );
+  } while (conditionFr1 && conditionFr2);
 
-  states.current.fruitCoords = [posX, posY];
+  states.current.fruitCoords = [posX1, posY1];
+  states.current.fruitFakeCoords = [posX2, posY2];
 };
 
 const increaseSnakeDots = (states) => {

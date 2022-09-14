@@ -23,11 +23,10 @@ import {
   WrapperQuestionAnswer,
   WrapperTop,
 } from './GameSnake.styles';
-import Snake from './Snake';
 
 const GameSnake = ({ words, setGamesOptions }) => {
   const [isMobile, setIsMobile] = useState(false);
-  const [finishGame, setFinishGame] = useState(false);
+  const [newWords, setNewWords] = useState(false);
 
   const [randomLeftRightCorrectAnswer, setRandomLeftRightCorrectAnswer] =
     useState(Math.floor(Math.random() * 2));
@@ -40,7 +39,7 @@ const GameSnake = ({ words, setGamesOptions }) => {
     const newGameOpt = getPairOfWordsGames(words);
     setGameOptions(newGameOpt);
     setRandomLeftRightCorrectAnswer(Math.floor(Math.random() * 2));
-  }, []);
+  }, [newWords]);
 
   return (
     <>
@@ -56,7 +55,6 @@ const GameSnake = ({ words, setGamesOptions }) => {
             Stop to play!
           </ButtonStyled>
 
-          {finishGame && <ButtonStyled>Play again</ButtonStyled>}
           <ButtonStyled onClick={() => setIsMobile((prev) => !prev)}>
             {isMobile ? ' Is Desktop?' : ' Is Mobile?'}
           </ButtonStyled>
@@ -95,7 +93,12 @@ const GameSnake = ({ words, setGamesOptions }) => {
           )}
         </WrapperButtons>
 
-        <FieldAndGameLogic isMobile={isMobile} />
+        <FieldAndGameLogic
+          isMobile={isMobile}
+          gameOptions={gameOptions}
+          setNewWords={setNewWords}
+        />
+
         {window.screen.width > THEME_STYLES.MOBILE_SIZE && (
           <WrapperQuestionAnswer isMobile={isMobile}>
             <Text>{question}?</Text>

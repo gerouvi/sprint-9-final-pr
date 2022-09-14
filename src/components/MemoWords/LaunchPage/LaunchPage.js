@@ -9,7 +9,7 @@ const LaunchPage = () => {
   console.log('launch page');
   return (
     <WrapperPage>
-      {window.screen.availWidth > THEME_STYLES.MOBILE_SIZE && (
+      {window.screen.width > THEME_STYLES.MOBILE_SIZE && (
         <TextDescription>
           <p>
             Welcome to Memo Words the website where you can memorize your

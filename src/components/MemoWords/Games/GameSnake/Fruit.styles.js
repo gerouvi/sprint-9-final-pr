@@ -5,6 +5,6 @@ export const FruitDot = styled.div`
   position: absolute;
   width: 5%;
   height: 5%;
-  background-color: orange;
+  background-color: ${({ color }) => console.log(color)};
   border: 1px solid white;
 `;
