@@ -21,7 +21,7 @@ const GameClassic = ({ words, setGamesOptions }) => {
         onClick={() => setGamesOptions((prev) => ({ ...prev, play: false }))}
         color="red"
       >
-        Stop
+        Exit
       </ButtonStyled>
       <Form
         onSubmit={(e) => {

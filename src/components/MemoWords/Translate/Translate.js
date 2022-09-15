@@ -21,8 +21,6 @@ const Translate = () => {
 
   console.log('Translate');
 
-  console.log(translateWords);
-
   return (
     <WrapperPage>
       <Wrapper>
@@ -51,6 +49,10 @@ const Translate = () => {
             ))}
           </SelectStyled>
 
+          <InputStyled
+            value={translateWords.word1}
+            onChange={(e) => setWord1(e.target.value)}
+          />
           <SelectStyled
             value={translateWords.option2}
             onChange={(e) => {
@@ -63,10 +65,6 @@ const Translate = () => {
               </option>
             ))}
           </SelectStyled>
-          <InputStyled
-            value={translateWords.word1}
-            onChange={(e) => setWord1(e.target.value)}
-          />
           {translateWords.word2 && (
             <InputStyled
               value={translateWords.word2}
@@ -77,6 +75,14 @@ const Translate = () => {
           <ButtonStyled>
             {translateWords.word2 ? 'Add Words' : 'Translate'}
           </ButtonStyled>
+          {translateWords.word2 && (
+            <ButtonStyled
+              onClick={() => setInitialStateTranslateWords()}
+              color="red"
+            >
+              Cancel
+            </ButtonStyled>
+          )}
         </form>
       </Wrapper>
     </WrapperPage>

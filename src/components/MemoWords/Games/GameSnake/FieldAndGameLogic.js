@@ -7,7 +7,6 @@ import {
   ArrowUp,
   FieldBorders,
   Fruit,
-  GameOver,
   Result,
   Wrapper,
   WrapperArrows,
@@ -42,6 +41,7 @@ const FieldAndGameLogic = ({ isMobile, gameOptions, setNewWords }) => {
   const { correctColorAnswer, wrongColorAnswer } = gameOptions;
 
   const gameLoop = () => {
+    const idAnimationFrame = window.requestAnimationFrame(gameLoop);
     coordinatesFunction(frame, states);
     const isOutside = isSnakeOutside(states);
     const hasEatenTail = isSnakeEatingItsTail(states);
@@ -49,8 +49,6 @@ const FieldAndGameLogic = ({ isMobile, gameOptions, setNewWords }) => {
       states,
       states.current.fruitFakeCoords
     );
-
-    const idAnimationFrame = window.requestAnimationFrame(gameLoop);
 
     if (isOutside || hasEatenTail || hasEatenFakeFruit) {
       states.current.finishGame = true;
@@ -267,8 +265,9 @@ const hasTheSnakeEatedTheFruit = (states, coords) => {
 };
 
 const generateRandomFruits = (states) => {
-  let conditionFr1 = true;
-  let conditionFr2 = true;
+  let conditionFr1 = undefined;
+  let conditionFr2 = undefined;
+  let condition3 = undefined;
   let posX1;
   let posY1;
   let posX2;
@@ -282,10 +281,13 @@ const generateRandomFruits = (states) => {
     conditionFr1 = states.current.snakeCoords.some(
       (coord) => coord[0] === posX1 && coord[1] === posY1
     );
+
     conditionFr2 = states.current.snakeCoords.some(
       (coord) => coord[0] === posX2 && coord[1] === posY2
     );
-  } while (conditionFr1 && conditionFr2);
+
+    condition3 = posX1 === posX2 && posY1 === posY2;
+  } while (conditionFr1 || conditionFr2 || condition3);
 
   states.current.fruitCoords = [posX1, posY1];
   states.current.fruitFakeCoords = [posX2, posY2];

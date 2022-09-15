@@ -10,7 +10,7 @@ import SignUpForm from './SignUpForm';
 
 const Account = () => {
   console.log('account');
-  const [view, setView] = useState('signup');
+  const [view, setView] = useState('signin');
 
   const { user } = useContext(UserAuthContext);
 
